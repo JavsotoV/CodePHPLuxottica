@@ -18,7 +18,18 @@ if (isset($_POST) && ( count($_POST) )) {
     $Variables = filter_input_array(INPUT_GET);
 }
 
+session_start();
+
 $luo_rolmenu = new clssegRolmenu();
+$luo_segsesion = new clssegSession();
+$user_codigo=1;//$luo_segsesion->get_per_codigo();
+
+if (!isset($user_codigo)){
+    
+    echo clsViewData::showError('-1', 'Sesion de usuario a terminado');
+    
+    return;
+}
 
 $paramAccion = $Variables['operacion'];
 
@@ -28,6 +39,7 @@ switch ($paramAccion)
         
     case 2:
         
+    //opciones segun rol asignado ---------------------------------------------
     case 3:
          $valida=['rse_codigo'=>['filter'=>FILTER_VALIDATE_INT]];
         
@@ -41,5 +53,14 @@ switch ($paramAccion)
      
     // Modulos mostrar a usuario segun sistema y usuario
     case 4: 
+        $valida = ['seg_codigo' => ['filter'    => FILTER_VALIDATE_INT]];
+        
+        $parametros = filter_var_array($Variables,$valida);
+        
+        $rowdata = $luo_rolmenu->lst_menuxusuario($user_codigo, $parametros['seg_codigo']);
+        
+        echo $rowdata;
+        
+        break;
 }
 
