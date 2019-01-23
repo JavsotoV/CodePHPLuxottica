@@ -307,12 +307,16 @@ function fn_printListItem($arrayItem, $Nivel, $pathRoot="" , $pathDivisor = '/',
                 $MenuPrint.="     ]\n";
                 break;
             case "2" || "3":
+                $MenuPrint.="     id:'". $Data["MEN_ITEMID"] . "', \n";
+                $MenuPrint.="     tabType:'iframe', \n";
                 $MenuPrint.="     text:'" . fn_returnStringFormatHTML($Data["DET_DENOMINACION"]) . "', \n";
                 $MenuPrint.="     det_codigo:" . $Data["DET_CODIGO"] . ", \n";                
                 $MenuPrint.="     rol_codigo:'" .$Data["ROL_CODIGO"]. "', \n";
                 $MenuPrint.="     men_url:'" .$Data["MEN_URL"]. "', \n";
                 $MenuPrint.="     det_resumen:'" . $Data["DET_RESUMEN"] . "', \n";
-                $MenuPrint.="     det_blob:'".$Data['DET_BLOB']."', \n";                
+                $MenuPrint.="     det_blob:'".$Data['DET_BLOB']."', \n"; 
+                $MenuPrint.="     men_view:'" . $Data ['MEN_VIEW'] . "', \n";
+                
                 $MenuPrint.="     leaf:true \n";
                 break;
            }
