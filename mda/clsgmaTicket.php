@@ -27,6 +27,11 @@ class clsgmaTicket {
     private $_tck_ip;
     private $_bin_filename;
     private $_bin_blob;
+    private $_bin_filename1;
+    private $_bin_blob1;
+    private $_bin_filename2;
+    private $_bin_blob2;
+
     private $_bin_bandera;
     private $_tck_emisor;
     private $_per_destinatario;
@@ -36,7 +41,11 @@ class clsgmaTicket {
     function __construct($an_usuario) {
         $this->_tck_codigo=0;
         $this->_bin_blob=null;
+        $this->_bin_blob1=null;
+        $this->_bin_blob2=null;
         $this->_bin_bandera=0;
+        $this->_bin_bandera1=0;
+        $this->_bin_bandera2=0;
         $this->_rpe_codigo=0;
         $this->_rse_nivel=1;
         $this->_per_destinatario=[];
@@ -93,8 +102,6 @@ class clsgmaTicket {
         
         if ( !is_array($_bin_blob) ){throw new Exception( 'No ha adjuntando ningun documento' );}
         
-     //   if ( $_bin_blob [ 'type' ] !== 'application/pdf' ){
-      //      throw new Exception( 'Solo se permite archivos PDF' );            
          if ( $_bin_blob [ 'size' ] > 99948388608 )
             {throw new Exception( 'El peso maximo permitido es 48Mb', -10000 );}
       
@@ -104,8 +111,39 @@ class clsgmaTicket {
         
         $this->_bin_bandera=1;
     }
-
-            
+        
+    function set_bin_blob1($_bin_blob) {
+       
+        $this->_bin_bandera1=0;
+        
+        if ( !is_array($_bin_blob) ){throw new Exception( 'No ha adjuntando ningun documento' );}
+        
+         if ( $_bin_blob [ 'size' ] > 99948388608 )
+            {throw new Exception( 'El peso maximo permitido es 48Mb', -10000 );}
+      
+        $this->_bin_blob1=file_get_contents($_bin_blob['tmp_name']); 
+        
+        $this->_bin_filename1=$_bin_blob['name'];
+        
+        $this->_bin_bandera1=1;
+    }
+    
+    function set_bin_blob2($_bin_blob) {
+       
+        $this->_bin_bandera2=0;
+        
+        if ( !is_array($_bin_blob) ){throw new Exception( 'No ha adjuntando ningun documento' );}
+        
+         if ( $_bin_blob [ 'size' ] > 99948388608 )
+            {throw new Exception( 'El peso maximo permitido es 48Mb', -10000 );}
+      
+        $this->_bin_blob2=file_get_contents($_bin_blob['tmp_name']); 
+        
+        $this->_bin_filename2=$_bin_blob['name'];
+        
+        $this->_bin_bandera2=1;
+    }
+    
      public function loadData ( $lstParametros ){
         foreach ( $lstParametros as $key => $value) {
             $method = 'set_' . ucfirst(strtolower( $key ) );
@@ -130,13 +168,19 @@ class clsgmaTicket {
                         :as_tck_ip,
                         :as_bin_filename,
                         :ab_bin_blob, 
+                        :as_bin_filename1,
+                        :ab_bin_blob1, 
+                        :as_bin_filename2,
+                        :ab_bin_blob2, 
                         :as_tck_emisor,
                         :an_rse_nivel,
                         :an_tck_usuario);
                     end;";
             
             $luo_con = new Db();
-             $blob=null;
+            $blob=null;
+            $blob1=null;
+            $blob2=null;
             
             if (!$luo_con->createConexion()){return clsViewData::showError($luo_con->getICodeError(), $luo_con->getSMsgError());}
                 
@@ -151,7 +195,19 @@ class clsgmaTicket {
             if(!$blob){
                 $error = oci_error($luo_con->refConexion);                
                 return clsViewData::showError($error['code'], $error['message']);}
+            
+            $blob1=oci_new_descriptor($luo_con->refConexion, OCI_D_LOB);
+            
+            if(!$blob1){
+                $error = oci_error($luo_con->refConexion);                
+                return clsViewData::showError($error['code'], $error['message']);}
                 
+            $blob2=oci_new_descriptor($luo_con->refConexion, OCI_D_LOB);
+            
+            if(!$blob2){
+                $error = oci_error($luo_con->refConexion);                
+                return clsViewData::showError($error['code'], $error['message']);}    
+            
             $crto = oci_new_cursor($luo_con->refConexion);
             if(!$crto){
                 $error = oci_error($luo_con->refConexion);                
@@ -173,7 +229,11 @@ class clsgmaTicket {
             oci_bind_by_name($stid,':an_rpe_codigo',$this->_rpe_codigo,10);
             oci_bind_by_name($stid,':as_tck_ip',$this->_tck_ip,64);
             oci_bind_by_name($stid,':as_bin_filename',$this->_bin_filename,200);
-            oci_bind_by_name($stid,':ab_bin_blob',$blob,-1,OCI_B_BLOB);             
+            oci_bind_by_name($stid,':ab_bin_blob',$blob,-1,OCI_B_BLOB);
+            oci_bind_by_name($stid,':as_bin_filename1',$this->_bin_filename1,200);
+            oci_bind_by_name($stid,':ab_bin_blob1',$blob1,-1,OCI_B_BLOB);
+            oci_bind_by_name($stid,':as_bin_filename2',$this->_bin_filename2,200);
+            oci_bind_by_name($stid,':ab_bin_blob2',$blob2,-1,OCI_B_BLOB);
             oci_bind_by_name($stid,':as_tck_emisor',$this->_tck_emisor,20);
             oci_bind_by_name($stid,':an_rse_nivel',$this->_rse_nivel,10);
             oci_bind_by_name($stid,':an_tck_usuario',$this->_tck_usuario,10);
@@ -182,9 +242,16 @@ class clsgmaTicket {
             
             if(!$result){
                 $error = oci_error($luo_con->refConexion);                
-                return clsViewData::showError($error['code'], $error['message']);}
+                return clsViewData::showError(-1, 'Error ejecutando procedimiento ticket');}
                        
-            if ($this->_bin_bandera===1){        
+            if(!oci_execute($crto)){
+                $error = oci_error($luo_con->refConexion);                
+                return clsViewData::showError($error['code'], $error['message']);
+            }
+            
+            if (!$luo_con->ocifetchRetorno($crto)){return clsViewData::showError($luo_con->getICodeError(), $luo_con->getSMsgError());}   
+  
+           if ($this->_bin_bandera===1){        
                 if(!$blob->save($this->_bin_blob)){                
                     oci_rollback($luo_con->refConexion);
                     oci_close($luo_con->refConexion);
@@ -192,12 +259,21 @@ class clsgmaTicket {
                 }            
             }
             
-            if(!oci_execute($crto)){
-                $error = oci_error($luo_con->refConexion);                
-                return clsViewData::showError($error['code'], $error['message']);
+            if ($this->_bin_bandera1===1){        
+                if(!$blob1->save($this->_bin_blob1)){                
+                    oci_rollback($luo_con->refConexion);
+                    oci_close($luo_con->refConexion);
+                    return clsViewData::showError('-1', 'Error registrando archivo blob1');
+                }            
             }
             
-            if (!$luo_con->ocifetchRetorno($crto)){return clsViewData::showError($luo_con->getICodeError(), $luo_con->getSMsgError());}   
+            if ($this->_bin_bandera2===1){        
+                if(!$blob2->save($this->_bin_blob2)){                
+                    oci_rollback($luo_con->refConexion);
+                    oci_close($luo_con->refConexion);
+                    return clsViewData::showError('-1', 'Error registrando archivo blob2');
+                }            
+            }
         
             $result=oci_commit($luo_con->refConexion);
             
@@ -216,13 +292,17 @@ class clsgmaTicket {
             
             oci_free_statement($stid);
             
-        if ($blob!==null) {$blob->free();};
+            if ($blob!==null) {$blob->free();};
+            
+            if ($blob1!==null) {$blob1->free();};
+            
+            if ($blob2!==null) {$blob2->free();};
         
             $luo_con->closeConexion();
             
             unset($luo_con);            
             
-            if ($an_accion!=3) { 
+         /*   if ($an_accion!=3) { 
                 
                 $luo_email = new clsEnviarEmail($rowdata);
                 
@@ -230,7 +310,7 @@ class clsgmaTicket {
            
                 unset($luo_email);
                 
-            }
+            }*/
             
             return $rowdata;       
             
