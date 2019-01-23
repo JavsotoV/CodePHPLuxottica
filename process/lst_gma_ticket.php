@@ -37,9 +37,16 @@ $luo_tck = new clsgmaTicket($user_codigo);
 switch ($paramAccion){
     
     case 1:
+        
         $lstTmpFileUpload = ['bin_blob'];
         $lstStatusBlob = [];
-          
+        
+        $lstTmpFileUpload1 = ['bin_blob1'];
+        $lstStatusBlob1 = [];
+        
+        $lstTmpFileUpload2 = ['bin_blob2'];
+        $lstStatusBlob2 = [];
+        
         $valida = [
             'accion'              => ['filter' => FILTER_VALIDATE_INT],
             'tck_codigo'          => ['filter' => FILTER_VALIDATE_INT],
@@ -67,17 +74,48 @@ switch ($paramAccion){
                     }
              }
              
+             foreach ( $lstTmpFileUpload1 as $Data ){
+                    if ( isset ( $_FILES [ $Data ] ) && ( $_FILES [ $Data ] [ 'tmp_name' ] !== '' ) ){
+                        if ( !is_uploaded_file ( $_FILES [ $Data ] [ 'tmp_name' ] ) ){
+                             throw new Exception( 'Fallo al tratar de subir el archivo ' . $_FILES [ $Data ] [ 'name' ] , -10000 );
+                        }
+                        $lstStatusBlob1 [ $Data ] = $_FILES [ $Data ];
+                    } else {
+                        $lstStatusBlob1 [ $Data ] = null;
+                    }
+             }
+             
+             foreach ( $lstTmpFileUpload2 as $Data ){
+                    if ( isset ( $_FILES [ $Data ] ) && ( $_FILES [ $Data ] [ 'tmp_name' ] !== '' ) ){
+                        if ( !is_uploaded_file ( $_FILES [ $Data ] [ 'tmp_name' ] ) ){
+                             throw new Exception( 'Fallo al tratar de subir el archivo ' . $_FILES [ $Data ] [ 'name' ] , -10000 );
+                        }
+                        $lstStatusBlob2 [ $Data ] = $_FILES [ $Data ];
+                    } else {
+                        $lstStatusBlob2 [ $Data ] = null;
+                    }
+             }
+             
              $parametros['tck_ip'] = $luo_segsesion->get_IPaddress();
             
              $luo_tck->loadData($parametros);    
                 
              if ( $lstStatusBlob [ 'bin_blob' ] !== null ){
                       $luo_tck->set_bin_blob($lstStatusBlob['bin_blob']);                       
-                    }        
-         
-                $rowdata = $luo_tck->sp_gma_ticket($parametros['accion']);
+             }
+             
+             if ( $lstStatusBlob1 [ 'bin_blob1' ] !== null ){
+                      $luo_tck->set_bin_blob1($lstStatusBlob1['bin_blob1']);                       
+             }
+             
+             if ( $lstStatusBlob2 [ 'bin_blob2' ] !== null ){
+                      $luo_tck->set_bin_blob2($lstStatusBlob2['bin_blob2']);                       
+             }
+             
+             $rowdata = $luo_tck->sp_gma_ticket($parametros['accion']);
         
-                echo $rowdata;
+             echo $rowdata;
+             
            }
            catch(Exception $ex){
                echo clsViewData::showError($Ex->getCode(), $Ex->getMessage());            
