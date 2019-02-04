@@ -49,12 +49,11 @@ class clsgccComprobantebinary {
     }
 
     function set_bin_blob($_bin_blob) {
-        $this->_bin_bandera=0;
+        
+            $this->_bin_bandera=0;
         
             if ( !is_array($_bin_blob) ){throw new Exception( 'No ha adjuntando ningun documento' );}
         
-     //      if (( $_bin_blob [ 'type' ] !== 'application/pdf' ) && ($_bin_blob [ 'type' ] !== 'image/jpeg' ) ){
-       //         throw new Exception( 'Solo se permite archivos PDF o JPG' );            
             if ( $_bin_blob [ 'size' ] > 50948388608 )
                 {throw new Exception( 'El peso maximo permitido es 20Mb', -10000 );}
       
@@ -63,7 +62,6 @@ class clsgccComprobantebinary {
                 $this->_bin_filename=$_bin_blob['name'];
         
                 $this->_bin_bandera=1;
-        //   }
     }
     
     public function loadData ( $lstParametros ){

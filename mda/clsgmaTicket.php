@@ -302,7 +302,7 @@ class clsgmaTicket {
             
             unset($luo_con);            
             
-         /*   if ($an_accion!=3) { 
+            if ($an_accion!=3) { 
                 
                 $luo_email = new clsEnviarEmail($rowdata);
                 
@@ -310,7 +310,7 @@ class clsgmaTicket {
            
                 unset($luo_email);
                 
-            }*/
+            }
             
             return $rowdata;       
             
