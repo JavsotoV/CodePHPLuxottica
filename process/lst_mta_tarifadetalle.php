@@ -33,7 +33,28 @@ $paramAccion = $Variables ['operacion'];
 $luo_tarifadetalle = new clsmtaTarifadetalle();
 
 switch ($paramAccion){
-    case 1:            
+    case 1:   
+        
+        $Variables['trd_precio']            = str_replace(",",".",$Variables['trd_precio']);
+        $Variables['trd_precioiva']         = str_replace(",",".",$Variables['trd_precioiva']);
+        
+        $valida = [
+            'accion'                => ['filter'        => FILTER_VALIDATE_INT],
+            'trf_codigo'            => ['filter'        => FILTER_VALIDATE_INT],
+            'trd_codigo'            => ['filter'        => FILTER_VALIDATE_INT],
+            'cta_codigo'            => ['filter'        => FILTER_VALIDATE_INT],
+            'trd_precio'            => ['filter'        => FILTER_VALIDATE_FLOAT],
+            'trd_precioiva'         => ['filter'        => FILTER_VALIDATE_FLOAT]
+        ];
+        
+        $parametros = filter_var_array($Variables, $valida);
+        
+        $luo_tarifadetalle->loadData($parametros);
+        
+        $rowdata = $luo_tarifadetalle->sp_mta_tarifadetalle($parametros['accion']);
+        
+        echo $rowdata;
+        
         break;
     
     case 2:

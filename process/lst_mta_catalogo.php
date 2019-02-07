@@ -33,7 +33,41 @@ $luo_catalogo = new clsmtaCatalogo();
 
 switch ($paramAccion){
     case 1:    
+         
+        $Variables['ivacb']                 = str_replace(",",".",$Variables['ivacb']);
+        $Variables['priprov']               = str_replace(",",".",$Variables['priprov']);
+        $Variables['stock_minimo']          = str_replace(",",".",$Variables['stock_minimo']);
+        $Variables['cri_diametroini']       = str_replace(",",".",$Variables['cri_diametroini']);
+        $Variables['cri_diametrofin']       = str_replace(",",".",$Variables['cri_diametrofin']);
+        $Variables['cri_cilindroini']       = str_replace(",",".",$Variables['cri_cilindroini']);
+        $Variables['cri_cilindrofin']       = str_replace(",",".",$Variables['cri_cilindrofin']);
+        $Variables['cri_esferaini']         = str_replace(",",".",$Variables['cri_esferaini']);
+        $Variables['cri_esferafin']         = str_replace(",",".",$Variables['cri_esferafin']);
+        $Variables['gfa_diagonal']          = str_replace(",",".",$Variables['gfa_diagonal']);
+        $Variables['gfa_horizontal']        = str_replace(",",".",$Variables['gfa_horizontal']);
+        $Variables['gfa_altura']            = str_replace(",",".",$Variables['gfa_altura']);
+        $Variables['gfa_curvabase']         = str_replace(",",".",$Variables['gfa_curvabase']);
+        $Variables['gfa_puente']            = str_replace(",",".",$Variables['gfa_puente']);
+        $Variables['gfa_largovarilla']      = str_replace(",",".",$Variables['gfa_largovarilla']);
+        $Variables['len_zonaop']            = str_replace(",",".",$Variables['len_zonaop']);
+        $Variables['len_eje']               = str_replace(",",".",$Variables['len_eje']);
+        $Variables['len_radi']              = str_replace(",",".",$Variables['len_radi']);
+        $Variables['len_diametro']          = str_replace(",",".",$Variables['len_diametro']);
+        $Variables['len_esfera']            = str_replace(",",".",$Variables['len_esfera']);
+        $Variables['len_cilindro']          = str_replace(",",".",$Variables['len_cilindro']);
+        $Variables['len_curvabase']         = str_replace(",",".",$Variables['len_curvabase']);
+        $Variables['len_esferah']           = str_replace(",",".",$Variables['len_esferah']);
+        $Variables['mon_altura']            = str_replace(",",".",$Variables['mon_altura']);
+        $Variables['mon_calibre']           = str_replace(",",".",$Variables['mon_calibre']);
+        $Variables['mon_puente']            = str_replace(",",".",$Variables['mon_puente']);
+        $Variables['mon_diagonal']          = str_replace(",",".",$Variables['mon_diagonal']);
+        $Variables['mon_horizontal']        = str_replace(",",".",$Variables['mon_horizontal']);
+        $Variables['mon_curvabase']         = str_replace(",",".",$Variables['mon_curvabase']);
+        $Variables['mon_largovarilla']      = str_replace(",",".",$Variables['mon_largovarilla']);
+        
+        
         $valida = [
+                'accion'            => ['filter'        => FILTER_VALIDATE_INT],
                 'cta_codigo'        => ['filter'        => FILTER_VALIDATE_INT],
                 'pai_codigo'        => ['filter'        => FILTER_VALIDATE_INT],
                 'cdg'               => ['filter'        => FILTER_UNSAFE_RAW],
@@ -128,6 +162,20 @@ switch ($paramAccion){
         $parametros = filter_var_array($Variables,$valida);
         
         $rowdata = $luo_catalogo->lst_catalogoatributo($parametros['cta_codigo']);
+        
+        echo $rowdata;
+        
+        break;
+    
+    case 4:
+        
+        $valida = [
+            'cta_codigo'            => ['filter'    => FILTER_VALIDATE_INT]
+        ];
+        
+        $parametros = filter_var_array($Variables,$valida);
+        
+        $rowdata = $luo_catalogo->lst_catalogoxid($parametros['cta_codigo']);
         
         echo $rowdata;
         

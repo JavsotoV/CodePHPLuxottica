@@ -33,6 +33,9 @@ $luo_ent = new clsgccEntidad($user_codigo);
 
 switch ($paramAccion){
     case 1:
+        
+        $Variables ['ent_importe'] = str_replace(",",".",$Variables ['ent_importe']);
+        
         $valida = [
             'accion'            => ['filter' => FILTER_VALIDATE_INT],
             'ent_codigo'        => ['filter' => FILTER_VALIDATE_INT],
@@ -40,7 +43,8 @@ switch ($paramAccion){
             'prc_codigo'        => ['filter' => FILTER_VALIDATE_INT],
             'per_codigo'        => ['filter' => FILTER_VALIDATE_INT],
             'per_responsable'   => ['filter' => FILTER_VALIDATE_INT],
-            'mon_codigo'        => ['filter' => FILTER_VALIDATE_INT]
+            'mon_codigo'        => ['filter' => FILTER_VALIDATE_INT],
+            'ent_importe'       => ['filter' => FILTER_VALIDATE_FLOAT]
         ];
         
           $parametros= filter_var_array($Variables,$valida);

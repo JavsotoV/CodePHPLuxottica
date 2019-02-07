@@ -72,6 +72,7 @@ switch ($paramAccion){
                     'cpt_codigo'        => ['filter'    => FILTER_VALIDATE_INT, 'flags' => FILTER_REQUIRE_ARRAY],
                     'lqd_observacion'   => ['filter'    => FILTER_UNSAFE_RAW, 'flags' => FILTER_REQUIRE_ARRAY],
                     'lqd_importe'       => ['filter'    => FILTER_VALIDATE_FLOAT, 'flags' => FILTER_REQUIRE_ARRAY],
+                    'lqd_afectoimp'     => ['filter'    => FILTER_VALIDATE_INT, 'flags' => FILTER_REQUIRE_ARRAY],
                     'lqd_estado'        => ['filter'    => FILTER_VALIDATE_INT, 'flags' => FILTER_REQUIRE_ARRAY]
                 ];
         
