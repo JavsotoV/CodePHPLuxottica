@@ -44,6 +44,7 @@ private $_lqd_codigo;
 private $_cpt_codigo;
 private $_lqd_observacion;
 private $_lqd_importe;
+private $_lqd_afectoimp;
 private $_lqd_estado;
 private $_bin_filename;
 private $_bin_blob;
@@ -58,6 +59,7 @@ private $_cmp_usuario;
         $this->_cpt_codigo=[];
         $this->_lqd_observacion=[];
         $this->_lqd_importe=[];
+        $this->_lqd_afectoimp=[];
         $this->_lqd_estado=[];    
         $this->_cmp_afectoimp=0;
         $this->_bin_blob=null;
@@ -168,6 +170,10 @@ private $_cmp_usuario;
         $this->_lqd_importe = $_lqd_importe;
     }
 
+    function set_lqd_afectoimp($_lqd_afectoimp) {
+        $this->_lqd_afectoimp = $_lqd_afectoimp;
+    }
+
     function set_lqd_estado($_lqd_estado) {
         $this->_lqd_estado = $_lqd_estado;
     }
@@ -231,6 +237,7 @@ private $_cmp_usuario;
                             :an_cpt_codigo,
                             :as_lqd_observacion,
                             :an_lqd_importe,
+                            :an_lqd_afectoimp,
                             :an_lqd_estado,
                             :ab_bin_blob,
                             :as_bin_filename,
@@ -250,6 +257,7 @@ private $_cmp_usuario;
                 $this->_cpt_codigo=Array(0);
                 $this->_lqd_observacion=Array('');
                 $this->_lqd_importe=Array(0);
+                $this->_lqd_afectoimp=Array(0);
                 $this->_lqd_estado=Array(0);
             }
             
@@ -310,6 +318,7 @@ private $_cmp_usuario;
             oci_bind_array_by_name($stid,':an_cpt_codigo',$this->_cpt_codigo,$ln_count,-1,SQLT_INT);
             oci_bind_array_by_name($stid,':as_lqd_observacion',$this->_lqd_observacion,$ln_count,-1,SQLT_CHR);
             oci_bind_array_by_name($stid,':an_lqd_importe',$this->_lqd_importe,$ln_count,-1,SQLT_FLT);
+            oci_bind_array_by_name($stid,':an_lqd_afectoimp',$this->_lqd_afectoimp,$ln_count,-1,SQLT_INT);
             oci_bind_array_by_name($stid,':an_lqd_estado',$this->_lqd_estado,$ln_count,-1,SQLT_INT);            
             oci_bind_by_name($stid,':ab_bin_blob',$blob,-1,OCI_B_BLOB);                     
             oci_bind_by_name($stid,':as_bin_filename',$this->_bin_filename,200);            

@@ -139,6 +139,13 @@ class clsgcaBinary {
                 $error = oci_error($luo_con->refConexion);                
                 return clsViewData::showError($error['code'], $error['message']);}
                        
+            if(!oci_execute($crto)){
+                $error = oci_error($luo_con->refConexion);                
+                return clsViewData::showError($error['code'], $error['message']);
+            }
+            
+            if (!$luo_con->ocifetchRetorno($crto)){return clsViewData::showError($luo_con->getICodeError(), $luo_con->getSMsgError());}   
+        
             if ($this->_bin_bandera===1){        
                 if(!$blob->save($this->_bin_blob)){                
                     oci_rollback($luo_con->refConexion);
@@ -147,13 +154,6 @@ class clsgcaBinary {
                 }            
             }
             
-            if(!oci_execute($crto)){
-                $error = oci_error($luo_con->refConexion);                
-                return clsViewData::showError($error['code'], $error['message']);
-            }
-            
-            if (!$luo_con->ocifetchRetorno($crto)){return clsViewData::showError($luo_con->getICodeError(), $luo_con->getSMsgError());}   
-        
             $result=oci_commit($luo_con->refConexion);
             
             if(!$result) {

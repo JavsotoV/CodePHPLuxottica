@@ -64,6 +64,8 @@ class clstrkEncargo {
             
             $ls_sql="sp_trk_lst_encargodetalle";
             
+            $ls_sqldet="sp_trk_find_fechaprogramada";
+            
             if(!$luo_con->createConexion()){return clsViewData::showError($luo_con->getICodeError(), $luo_con->getSMsgError());}
             
             $stmt=mssql_init($ls_sql,$luo_con->refConexion);
@@ -81,11 +83,56 @@ class clstrkEncargo {
             
             $result = $luo_con->sqlsrvExecute($stmt);
             
+            mssql_free_statement($stmt);
+            
             if (!$result){return clsViewData::showError(-1, 'error ejecutanndo procedimiento sp_trk_lst_encargodetalle');}
             
-            $rowdata= clsViewData::viewData(mssqlparsear($result),false);
+            /*------tenemos que colocar la fecha programada para entrega -------*/
+            if (($an_pai_codigo==1) || ($an_pai_codigo==4)){
+                
+                $ls_grupo='';
+                $ld_fechaprogramada=null;
+                
+                $stmtdet=mssql_init($ls_sqldet,$luo_con->refConexion);
+                
+                while ($row = mssql_fetch_array($result, MSSQL_ASSOC)) 
+                {
+                    
+                    if ($ls_grupo!=$row['grupo']){
+                        
+                        $ls_grupo=$row['grupo'];
+                        
+                        $ld_fechaprogramada=null;
+                        
+                        mssql_bind($stmtdet,'@as_encargo', $as_encargo, SQLVARCHAR, false, false, 20);
+                    
+                        mssql_bind($stmtdet,'@as_grupo', $ls_grupo, SQLVARCHAR, false, false, 10);
+                    
+                        $resultdet=mssql_execute($stmtdet);
+                    
+                        if (!$resultdet){
+                            return clsViewData::showError(-1, 'Error obteniendo detalle de encargo '.$ls_grupo);
+                        }
+                    
+                        while ($rowdet = mssql_fetch_array($resultdet, MSSQL_ASSOC)) {
+                            $ld_fechaprogramada= $rowdet['fechaprogramada'];                    
+                        }
+                    }
+                    
+                    $row['fechaprogramada']=$ld_fechaprogramada;
+                    
+                    $lstArray[] = $row;
+                }            
+            }else{
+                while ($row = mssql_fetch_array($result, MSSQL_ASSOC)) 
+                {
+                    $lstArray[] = $row;
+                }
+            }
             
-            mssql_free_statement($stmt);
+            $rowdata= clsViewData::viewData($lstArray,false);
+           
+            mssql_free_statement($stmtdet);
             
             $luo_con->closeConexion();
              
@@ -130,7 +177,7 @@ class clstrkEncargo {
             
             mssql_free_statement($stmt);
             
-            if (!$result){return clsViewData::showError(-1, 'error ejecutanndo procedimiento sp_trk_lst_encargoxcliente');}
+            if (!$result){return clsViewData::showError(-1, 'error ejecutando procedimiento sp_trk_lst_encargoxcliente');}
             
             if (($an_pai_codigo==1) || ($an_pai_codigo==4)){
                 

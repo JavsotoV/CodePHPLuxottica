@@ -148,7 +148,7 @@ function set_codsap($_codsap) {
 }
 
 function set_descripcion($_descripcion) {
-    $this->_descripcion = $_descripcion;
+    $this->_descripcion = mb_strtoupper($_descripcion,'utf-8');
 }
 
 function set_descatalogado($_descatalogado) {
@@ -164,7 +164,7 @@ function set_gfa_codigo($_gfa_codigo) {
 }
 
 function set_alias($_alias) {
-    $this->_alias = $_alias;
+    $this->_alias = mb_strtoupper($_alias,'utf-8');
 }
 
 function set_ivacb($_ivacb) {    
@@ -176,7 +176,7 @@ function set_priprov($_priprov) {
 }
 
 function set_nomcom($_nomcom) {
-    $this->_nomcom = $_nomcom;
+    $this->_nomcom = mb_strtoupper($_nomcom,'utf-8');
 }
 
 function set_inventariar($_inventariar) {
@@ -272,7 +272,7 @@ function set_gfa_largovarilla($_gfa_largovarilla) {
 }
 
 function set_len_marca($_len_marca) {
-    $this->_len_marca = $_len_marca;
+    $this->_len_marca = mb_strtoupper($_len_marca,'utf-8');
 }
 
 function set_len_zonaop($_len_zonaop) {
@@ -347,13 +347,10 @@ public function loadData ( $lstParametros ){
 public function sp_mta_catalogo($an_accion){
     try{
         
-        $ln_retorno=1;
-        
-        $ls_mensaje='Registro realizado correctamente';
-        
-        $ls_sql="pck_mta_catalogo.sp_mta_catalogo (  :an_accion,
-                :ln_retorno,
-                :ls_mensaje,
+        $ls_sql="begin
+                    pck_mta_catalogo.sp_mta_catalogo(:an_accion,
+                :acr_retorno,
+                :acr_cursor,
                 :an_cta_codigo,
                 :an_pai_codigo,
                 :as_cdg,
@@ -407,7 +404,7 @@ public function sp_mta_catalogo($an_accion){
                 to_number(:an_mon_curvabase,'999,999,999.999'),
                 to_number(:an_mon_largovarilla,'999,999,999.999'),
                 :an_cta_usuario);
-            end;";
+             end;";
         
            $luo_con= new  Db();
             
@@ -418,71 +415,71 @@ public function sp_mta_catalogo($an_accion){
            };
             
            oci_bind_by_name($stid,':an_accion',$an_accion,10) or die(oci_error($luo_con->refConexion));
-           oci_bind_by_name($stid,':ln_retorno',$ln_retorno,10);
-           oci_bind_by_name($stid,':ls_mensaje',$ls_mensaje,250);
+           oci_bind_by_name($stid,':acr_retorno',$crto,-1,OCI_B_CURSOR) or die(oci_error($luo_con->refConexion));
+           oci_bind_by_name($stid,':acr_cursor',$curs,-1,OCI_B_CURSOR) or die(oci_error($luo_con->refConexion));
            oci_bind_by_name($stid,':an_cta_codigo',$this->_cta_codigo,10);
            oci_bind_by_name($stid,':an_pai_codigo',$this->_pai_codigo,10);
-           oci_bind_by_name($stid,':as_cdg',$this->_cdg,10);
-           oci_bind_by_name($stid,':as_codigobarras',$this->_codigobarras,10);
-           oci_bind_by_name($stid,':as_codsap',$this->_codsap,10);
-           oci_bind_by_name($stid,':as_descripcion',$this->_descripcion,10);
+           oci_bind_by_name($stid,':as_cdg',$this->_cdg,20);
+           oci_bind_by_name($stid,':as_codigobarras',$this->_codigobarras,20);
+           oci_bind_by_name($stid,':as_codsap',$this->_codsap,20);
+           oci_bind_by_name($stid,':as_descripcion',$this->_descripcion,120);
            oci_bind_by_name($stid,':as_descatalogado',$this->_descatalogado,10);
            oci_bind_by_name($stid,':as_tipfamcod',$this->_tipfamcod,10);
            oci_bind_by_name($stid,':an_gfa_codigo',$this->_gfa_codigo,10);
-           oci_bind_by_name($stid,':as_alias',$this->_alias,10);
-           oci_bind_by_name($stid,':an_ivacb',$this->_ivacb,10);
-           oci_bind_by_name($stid,':an_priprov',$this->_priprov,10);
-           oci_bind_by_name($stid,':as_nomcom',$this->_nomcom,10);
+           oci_bind_by_name($stid,':as_alias',$this->_alias,20);
+           oci_bind_by_name($stid,':an_ivacb',$this->_ivacb,15);
+           oci_bind_by_name($stid,':an_priprov',$this->_priprov,15);
+           oci_bind_by_name($stid,':as_nomcom',$this->_nomcom,25);
            oci_bind_by_name($stid,':as_inventariar',$this->_inventariar,10);
-           oci_bind_by_name($stid,':an_stock_minimo',$this->_stock_minimo,10);
+           oci_bind_by_name($stid,':an_stock_minimo',$this->_stock_minimo,15);
            oci_bind_by_name($stid,':as_liquidacion',$this->_liquidacion,10);
            oci_bind_by_name($stid,':as_etiquetar',$this->_etiquetar,10);
            oci_bind_by_name($stid,':an_col_codigo',$this->_col_codigo,10);
-           oci_bind_by_name($stid,':an_cri_diametroini',$this->_cri_diametroini,10);
-           oci_bind_by_name($stid,':an_cri_diametrofin',$this->_cri_diametrofin,10);
-           oci_bind_by_name($stid,':an_cri_cilindroini',$this->_cri_cilindroini,10);
-           oci_bind_by_name($stid,':an_cri_cilindrofin',$this->_cri_cilindrofin,10);
-           oci_bind_by_name($stid,':an_cri_esferaini',$this->_cri_esferaini,10);
-           oci_bind_by_name($stid,':an_cri_esferafin',$this->_cri_esferafin,10);
+           oci_bind_by_name($stid,':an_cri_diametroini',$this->_cri_diametroini,15);
+           oci_bind_by_name($stid,':an_cri_diametrofin',$this->_cri_diametrofin,15);
+           oci_bind_by_name($stid,':an_cri_cilindroini',$this->_cri_cilindroini,15);
+           oci_bind_by_name($stid,':an_cri_cilindrofin',$this->_cri_cilindrofin,15);
+           oci_bind_by_name($stid,':an_cri_esferaini',$this->_cri_esferaini,15);
+           oci_bind_by_name($stid,':an_cri_esferafin',$this->_cri_esferafin,15);
            oci_bind_by_name($stid,':an_col_codigoc',$this->_col_codigoc,10);
            oci_bind_by_name($stid,':an_col_codigom',$this->_col_codigom,10);
            oci_bind_by_name($stid,':an_mta_codigo',$this->_mta_codigo,10);
-           oci_bind_by_name($stid,':an_gfa_graduable',$this->_gfa_graduable,10);
-           oci_bind_by_name($stid,':an_gfa_cristal',$this->_gfa_cristal,10);
+           oci_bind_by_name($stid,':as_gfa_graduable',$this->_gfa_graduable,10);
+           oci_bind_by_name($stid,':as_gfa_cristal',$this->_gfa_cristal,10);
            oci_bind_by_name($stid,':as_gfa_sexo',$this->_gfa_sexo,10);
-           oci_bind_by_name($stid,':an_gfa_diagonal',$this->_gfa_diagonal,10);
-           oci_bind_by_name($stid,':an_gfa_horizontal',$this->_gfa_horizontal,10);
-           oci_bind_by_name($stid,':an_gfa_altura',$this->_gfa_altura,10);
-           oci_bind_by_name($stid,':an_gfa_curvabase',$this->_gfa_curvabase,10);
-           oci_bind_by_name($stid,':an_gfa_puente',$this->_gfa_puente,10);
-           oci_bind_by_name($stid,':an_gfa_largovarilla',$this->_gfa_largovarilla,10);
-           oci_bind_by_name($stid,':as_len_marca',$this->_len_marca,10);
-           oci_bind_by_name($stid,':an_len_zonaop',$this->_len_zonaop,10);
-           oci_bind_by_name($stid,':an_len_eje',$this->_len_eje,10);
-           oci_bind_by_name($stid,':an_len_radi',$this->_len_radi,10);
-           oci_bind_by_name($stid,':an_len_diametro',$this->_len_diametro,10);
-           oci_bind_by_name($stid,':an_len_esfera',$this->_len_esfera,10);
-           oci_bind_by_name($stid,':an_len_cilindro',$this->_len_cilindro,10);
-           oci_bind_by_name($stid,':an_len_curvabase',$this->_len_curvabase,10);
-           oci_bind_by_name($stid,':an_len_esferah',$this->_len_esferah,10);
-           oci_bind_by_name($stid,':an_mon_altura',$this->_mon_altura,10);
-           oci_bind_by_name($stid,':an_mon_calibre',$this->_mon_calibre,10);
-           oci_bind_by_name($stid,':an_mon_puente',$this->_mon_puente,10);
-           oci_bind_by_name($stid,':an_mon_diagonal',$this->_mon_diagonal,10);
-           oci_bind_by_name($stid,':an_mon_horizontal',$this->_mon_horizontal,10);
-           oci_bind_by_name($stid,':an_mon_curvabase',$this->_mon_curvabase,10);
-           oci_bind_by_name($stid,':an_mon_largovarilla',$this->_mon_largovarilla,10);
-           oci_bind_by_name($stid,':an_cta_usaurio',$this->_cta_usuario,10);
+           oci_bind_by_name($stid,':an_gfa_diagonal',$this->_gfa_diagonal,15);
+           oci_bind_by_name($stid,':an_gfa_horizontal',$this->_gfa_horizontal,15);
+           oci_bind_by_name($stid,':an_gfa_altura',$this->_gfa_altura,15);
+           oci_bind_by_name($stid,':an_gfa_curvabase',$this->_gfa_curvabase,15);
+           oci_bind_by_name($stid,':an_gfa_puente',$this->_gfa_puente,15);
+           oci_bind_by_name($stid,':an_gfa_largovarilla',$this->_gfa_largovarilla,15);
+           oci_bind_by_name($stid,':as_len_marca',$this->_len_marca,60);
+           oci_bind_by_name($stid,':an_len_zonaop',$this->_len_zonaop,15);
+           oci_bind_by_name($stid,':an_len_eje',$this->_len_eje,15);
+           oci_bind_by_name($stid,':an_len_radi',$this->_len_radi,15);
+           oci_bind_by_name($stid,':an_len_diametro',$this->_len_diametro,15);
+           oci_bind_by_name($stid,':an_len_esfera',$this->_len_esfera,15);
+           oci_bind_by_name($stid,':an_len_cilindro',$this->_len_cilindro,15);
+           oci_bind_by_name($stid,':an_len_curvabase',$this->_len_curvabase,15);
+           oci_bind_by_name($stid,':an_len_esferah',$this->_len_esferah,15);
+           oci_bind_by_name($stid,':an_mon_altura',$this->_mon_altura,15);
+           oci_bind_by_name($stid,':an_mon_calibre',$this->_mon_calibre,15);
+           oci_bind_by_name($stid,':an_mon_puente',$this->_mon_puente,15);
+           oci_bind_by_name($stid,':an_mon_diagonal',$this->_mon_diagonal,15);
+           oci_bind_by_name($stid,':an_mon_horizontal',$this->_mon_horizontal,15);
+           oci_bind_by_name($stid,':an_mon_curvabase',$this->_mon_curvabase,15);
+           oci_bind_by_name($stid,':an_mon_largovarilla',$this->_mon_largovarilla,15);
+           oci_bind_by_name($stid,':an_cta_usuario',$this->_cta_usuario,10);
            
             if(!$luo_set->ReadcrsMant($luo_con, $stid, $crto)){
-                return clsViewData::showError($luo_con->getICodeError(),$luo_con->getSMsgError());
+                return clsViewData::showError(-1,'erroe');
             }
             
             $luo_con->commitTransaction();
             
             $lstData = ( $an_accion != 3 ? parsearcursor($curs) : [] );
                 
-            $rowdata = clsViewData::viewData($lstData, false, $ln_retorno, $ls_mensaje);
+            $rowdata = clsViewData::viewData($lstData, false, 1,$luo_con->getMsgRetorno());
                  
             oci_free_statement($crto);
             
@@ -594,6 +591,43 @@ public function sp_mta_catalogo($an_accion){
              return $rowdata;
         }
         catch(Exception $ex ){
+            return clsViewData::showError($ex->getCode(), $ex->getMessage());
+        }
+    }
+    
+    public function lst_catalogoxid($an_cta_codigo){
+        try{
+            
+            $ls_sql="begin
+                        pck_mta_catalogo.sp_lst_catalogoxid (:acr_cursor,
+                        :an_cta_codigo);
+                    end;";
+            
+            $luo_con = new Db();
+            
+            $luo_set = new clsReference();
+            
+            if(!$luo_set->setcrsLst($luo_con, $ls_sql, $stid, $curs)){
+                return clsViewData::showError($luo_con->getICodeError(),$luo_con->getSMsgError());
+            }
+            
+             oci_bind_by_name($stid,':acr_cursor',$curs,-1,OCI_B_CURSOR)or die(oci_error($luo_con->refConexion));
+             oci_bind_by_name($stid,':an_cta_codigo',$an_cta_codigo,10);
+            
+              if(!$luo_con->ociExecute($stid)){return clsViewData::showError($luo_con->getICodeError(), $luo_con->getSMsgError());}
+             
+             $rowdata= clsViewData::viewData(parsearcursor($curs),false);
+             
+             oci_free_statement($stid);
+             
+             $luo_con->closeConexion();
+             
+             unset($luo_con);
+             
+             return $rowdata;
+            
+        }
+        catch(Exception $ex){
             return clsViewData::showError($ex->getCode(), $ex->getMessage());
         }
     }

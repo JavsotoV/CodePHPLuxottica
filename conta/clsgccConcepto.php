@@ -111,12 +111,12 @@ class clsgccConcepto {
            $ln_rowcount=0;
            
            $ls_sql="begin
-                        pck_gcc_concepto.sp_lst_listar (  :acr_cursor,
+                        pck_gcc_concepto.sp_lst_listar(:acr_cursor,
                             :ln_rowcount,
                             :an_cpt_codigo,
                             :as_criterio,
                             :an_start,
-                            :an_limit) ;
+                            :an_limit);
                     end;";
            
             $luo_con = new Db();

@@ -26,11 +26,13 @@ class clsgccEntidad {
     private $_per_codigo;
     private $_per_responsable;
     private $_mon_codigo;
+    private $_ent_importe;
     private $_ent_usuario;
     
     function __construct($an_ent_usuario) {
         $this->_ent_usuario=$an_ent_usuario;
         $this->_ent_codigo=0;
+        $this->_ent_importe=0;
     }
     
     function set_ent_codigo($_ent_codigo) {
@@ -56,6 +58,10 @@ class clsgccEntidad {
     function set_mon_codigo($_mon_codigo) {
         $this->_mon_codigo = $_mon_codigo;
     }
+    
+    function set_ent_importe($_ent_importe) {
+        $this->_ent_importe =number_format(validaNull($_ent_importe,0,'float'),2);
+    }
 
     public function loadData ( $lstParametros ){
         foreach ( $lstParametros as $key => $value) {
@@ -78,6 +84,7 @@ class clsgccEntidad {
                             :an_per_codigo,
                             :an_per_responsable,
                             :an_mon_codigo,
+                            :an_ent_importe,
                             :an_ent_usuario) ;
                     end;";
             
@@ -98,6 +105,7 @@ class clsgccEntidad {
             oci_bind_by_name($stid,':an_per_codigo',$this->_per_codigo,10);
             oci_bind_by_name($stid,':an_per_responsable',$this->_per_responsable,10);
             oci_bind_by_name($stid,':an_mon_codigo',$this->_mon_codigo,10);
+            oci_bind_by_name($stid,':an_ent_importe',$this->_ent_importe,15);
             oci_bind_by_name($stid,':an_ent_usuario',$this->_ent_usuario,10);
             
              if(!$luo_set->ReadcrsMant($luo_con, $stid, $crto)){
