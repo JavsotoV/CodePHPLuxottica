@@ -43,8 +43,7 @@ switch ($paramAccion){
           $valida=['accion'         =>['filter'=>FILTER_VALIDATE_INT],
                  'con_codigo'       =>['filter'=>FILTER_VALIDATE_INT],
                  'bin_codigo'       =>['filter'=>FILTER_VALIDATE_INT],
-                 'bin_descripcion'  =>['filter'=>FILTER_UNSAFE_RAW],
-                 'bin_filename'     =>['filter'=>FILTER_UNSAFE_RAW]   
+                 'bin_descripcion'  =>['filter'=>FILTER_UNSAFE_RAW]   
               ];
         
         $parametros= filter_var_array($Variables,$valida);

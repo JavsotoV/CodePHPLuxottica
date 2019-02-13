@@ -16,9 +16,10 @@ require_once ( "../../excel/PHPExcel/IOFactory.php");
 
 extract($_POST);
 
-$name = $_FILES['filedata']['name']; 
-$tname = $_FILES['filedata']['tmp_name'];
-$type = $_FILES['filedata']['type'];
+$name = $_FILES['bin_blob']['name']; 
+$tname = $_FILES['bin_blob']['tmp_name'];
+$type = $_FILES['bin_blob']['type'];
+$tipfamcod = $_POST['tipfamcod'];
 
 if ($type=='application/vnd.ms-excel')
     {$ext = 'Excel5';
@@ -43,9 +44,29 @@ $rowdata= [];
 
 $fil=0;
 $col=0;
+$filadata=7;
 
-$lst_cristal = array('cdg','codigobarras','codsap','descripcion','familia','subfam','grupofam','descatalogado','alias','ivacb','priprov','nomcom','inventariar','liquidacion','etiquetar',
-    'colores','material','desdediametro','hastadiametro','desdecilindro','hastacilindro','desdeesfera','hastaesfera');
+if ($tipfamcod=='C'){
+        $lst_campos = array('cdg','codigobarras','codsap','descripcion','familia','subfam','grupofam','descatalogado','alias','ivacb','priprov','nomcom','inventariar','liquidacion','etiquetar',
+        'colores','material','desdediametro','hastadiametro','desdecilindro','hastacilindro','desdeesfera','hastaesfera');
+};
+
+if ($tipfamcod=='M'){
+        $lst_campos= array('cdg','codigobarras','codsap','descripcion','familia','subfam','grupofam','descatalogado','alias','ivacb','priprov','nomcom','inventariar','liquidacion','etiquetar',
+        'colores','material','altura','calibre','puente','curvabase','largovarilla','diagonal','horiz');
+}
+
+if ($tipfamcod=='G'){
+        $lst_campos= array('cdg','codigobarras','codsap','descripcion','familia','subfam','grupofam','descatalogado','alias','ivacb','priprov','nomcom','inventariar','liquidacion','etiquetar',
+        'material','colorc','colorm','graduable','sexo','diagonal','horiz','altura','curvabase','puente','largovarilla');
+}
+
+if ($tipfamcod=='L'){
+        $lst_campos= array('cdg','codigobarras','codsap','descripcion','familia','subfam','grupofam','descatalogado','alias','ivacb','priprov','nomcom','inventariar','liquidacion','etiquetar',
+        'colores','marca','zonaop','eje','radio','desdeesfera','hastaesfera','curvabase','desdediametro','desdecilindro');
+}
+
+$ln_rowcount=0;
 
 foreach ($objWorksheet->getRowIterator() as $row) {
  
@@ -56,36 +77,97 @@ foreach ($objWorksheet->getRowIterator() as $row) {
     $col=0;
     $fil++;
     
-    if ($fil>1){
-    foreach ($cellIterator as $cell) {
-       $data[$col] =  $cell->getValue();
-        $col++;                       
-    }
+    if ($fil>$filadata){
+        
+        $ln_rowcount++;
+        
+        foreach ($cellIterator as $cell) {
+                     $data[$col] =  $cell->getValue();
+                     $col++;                       
+        }
     
-    array_push ( $rowdata, [ $campos[0]=>$data[0],
-                             $campos[1]=>$data[1],
-                             $campos[2]=>$data[2],
-                             $campos[3]=>$data[3],
-                             $campos[4]=>$data[4],
-                             $campos[5]=>$data[5],
-                             $campos[6]=>$data[6],
-                             $campos[7]=>$data[7],
-                             $campos[8]=>$data[8],
-                             $campos[9]=>$data[9],
-                             $campos[10]=>$data[10],
-                             $campos[11]=>$data[11],
-                             $campos[12]=>$data[12],
-                             $campos[13]=>$data[13],
-                             $campos[14]=>$data[14],
-                             $campos[15]=>$data[15],
-                             $campos[16]=>$data[16],
-                             $campos[17]=>$data[17],
-                             $campos[18]=>$data[18],
-                             $campos[19]=>$data[19],
-                             $campos[20]=>$data[20],
-                             $campos[21]=>$data[21],
-                             $campos[22]=>$data[22]] );
-    } 
+            if ($tipfamcod=='C'){
+                    array_push ( $rowdata, [ $lst_campos[0]=>$data[0],
+                                             $lst_campos[1]=>$data[1],
+                                             $lst_campos[2]=>$data[2],
+                                             $lst_campos[3]=>$data[3],
+                                             $lst_campos[4]=>$data[4],
+                                             $lst_campos[5]=>$data[5],
+                                             $lst_campos[6]=>$data[6],
+                                             $lst_campos[7]=>$data[7],
+                                             $lst_campos[8]=>$data[8],
+                                             $lst_campos[9]=>$data[9],
+                                             $lst_campos[10]=>$data[10],
+                                             $lst_campos[11]=>$data[11],
+                                             $lst_campos[12]=>$data[12],
+                                             $lst_campos[13]=>$data[13],
+                                             $lst_campos[14]=>$data[14],
+                                             $lst_campos[15]=>$data[15],
+                                             $lst_campos[16]=>$data[16],
+                                             $lst_campos[17]=>$data[17],
+                                             $lst_campos[18]=>$data[18],
+                                             $lst_campos[19]=>$data[19],
+                                             $lst_campos[20]=>$data[20],
+                                             $lst_campos[21]=>$data[21],
+                                             $lst_campos[22]=>$data[22]] );}
+                                             
+             if ($tipfamcod=='M'){
+                    array_push ( $rowdata, [ $lst_campos[0]=>$data[0],
+                                             $lst_campos[1]=>$data[1],
+                                             $lst_campos[2]=>$data[2],
+                                             $lst_campos[3]=>$data[3],
+                                             $lst_campos[4]=>$data[4],
+                                             $lst_campos[5]=>$data[5],
+                                             $lst_campos[6]=>$data[6],
+                                             $lst_campos[7]=>$data[7],
+                                             $lst_campos[8]=>$data[8],
+                                             $lst_campos[9]=>$data[9],
+                                             $lst_campos[10]=>$data[10],
+                                             $lst_campos[11]=>$data[11],
+                                             $lst_campos[12]=>$data[12],
+                                             $lst_campos[13]=>$data[13],
+                                             $lst_campos[14]=>$data[14],
+                                             $lst_campos[15]=>$data[15],
+                                             $lst_campos[16]=>$data[16],
+                                             $lst_campos[17]=>$data[17],
+                                             $lst_campos[18]=>$data[18],
+                                             $lst_campos[19]=>$data[19],
+                                             $lst_campos[20]=>$data[20],
+                                             $lst_campos[21]=>$data[21],
+                                             $lst_campos[22]=>$data[22],
+                                             $lst_campos[23]=>$data[23]] );}    
+                                             
+            if (($tipfamcod=='G')|| ($tipfamcod=='L')) {
+                    array_push ( $rowdata, [ $lst_campos[0]=>$data[0],
+                                             $lst_campos[1]=>$data[1],
+                                             $lst_campos[2]=>$data[2],
+                                             $lst_campos[3]=>$data[3],
+                                             $lst_campos[4]=>$data[4],
+                                             $lst_campos[5]=>$data[5],
+                                             $lst_campos[6]=>$data[6],
+                                             $lst_campos[7]=>$data[7],
+                                             $lst_campos[8]=>$data[8],
+                                             $lst_campos[9]=>$data[9],
+                                             $lst_campos[10]=>$data[10],
+                                             $lst_campos[11]=>$data[11],
+                                             $lst_campos[12]=>$data[12],
+                                             $lst_campos[13]=>$data[13],
+                                             $lst_campos[14]=>$data[14],
+                                             $lst_campos[15]=>$data[15],
+                                             $lst_campos[16]=>$data[16],
+                                             $lst_campos[17]=>$data[17],
+                                             $lst_campos[18]=>$data[18],
+                                             $lst_campos[19]=>$data[19],
+                                             $lst_campos[20]=>$data[20],
+                                             $lst_campos[21]=>$data[21],
+                                             $lst_campos[22]=>$data[22],
+                                             $lst_campos[23]=>$data[23],
+                                             $lst_campos[24]=>$data[24]] );}  
+                                             
+            
+        }
+    
+    
  }
  
-echo json_encode(['success'=>true,'data'=>$rowdata]);
+echo json_encode(['success'=>true,'proceso'=>true,'data'=>$rowdata,'total'=>$ln_rowcount]);
