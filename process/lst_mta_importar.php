@@ -36,6 +36,7 @@ switch ($paramAccion){
     case 1:
             $valida = [
                 'accion'            => ['filter'        => FILTER_VALIDATE_INT],
+                'imp_codigo'        => ['filter'        => FILTER_VALIDATE_INT],
                 'pai_codigo'        => ['filter'        => FILTER_VALIDATE_INT],
                 'tipfamcod'         => ['filter'        => FILTER_UNSAFE_RAW],
                 'imp_origen'        => ['filter'        => FILTER_VALIDATE_INT],
@@ -68,6 +69,7 @@ switch ($paramAccion){
                 'puente'            => ['filter'        => FILTER_VALIDATE_FLOAT, 'flags' => FILTER_REQUIRE_ARRAY],  
                 'curvabase'         => ['filter'        => FILTER_VALIDATE_FLOAT, 'flags' => FILTER_REQUIRE_ARRAY],  
                 'largovarilla'      => ['filter'        => FILTER_VALIDATE_FLOAT, 'flags' => FILTER_REQUIRE_ARRAY],  
+                'polarized'         => ['filter'        => FILTER_UNSAFE_RAW,     'flags' => FILTER_REQUIRE_ARRAY],
                 'diagonal'          => ['filter'        => FILTER_VALIDATE_FLOAT, 'flags' => FILTER_REQUIRE_ARRAY],  
                 'horiz'             => ['filter'        => FILTER_VALIDATE_FLOAT, 'flags' => FILTER_REQUIRE_ARRAY],  
                 'colorc'            => ['filter'        => FILTER_UNSAFE_RAW, 'flags' => FILTER_REQUIRE_ARRAY],
@@ -77,23 +79,21 @@ switch ($paramAccion){
                 'marca'             => ['filter'        => FILTER_UNSAFE_RAW, 'flags' => FILTER_REQUIRE_ARRAY],
                 'zonaop'            => ['filter'        => FILTER_VALIDATE_FLOAT, 'flags' => FILTER_REQUIRE_ARRAY],      
                 'eje'               => ['filter'        => FILTER_VALIDATE_FLOAT, 'flags' => FILTER_REQUIRE_ARRAY],  
-                'radio'             => ['filter'        => FILTER_VALIDATE_FLOAT, 'flags' => FILTER_REQUIRE_ARRAY]];
+                'radio'             => ['filter'        => FILTER_VALIDATE_FLOAT, 'flags' => FILTER_REQUIRE_ARRAY],
+                'tarifa'            => ['filter'        => FILTER_UNSAFE_RAW, 'flags' => FILTER_REQUIRE_ARRAY],
+                'precio'            => ['filter'        => FILTER_VALIDATE_FLOAT, 'flags' => FILTER_REQUIRE_ARRAY],
+                'precioiva'         => ['filter'        => FILTER_VALIDATE_FLOAT, 'flags' => FILTER_REQUIRE_ARRAY]
+                ];
         
             $parametros = filter_var_array($Variables, $valida);
+   
+            $luo_importar->loadData($parametros);
             
-            try{
-                $luo_importar->loadData($parametros);
-            
-                $rowdata = $luo_importar->sp_mta_importar($parametros['accion']);
+            $rowdata = $luo_importar->sp_mta_importar($parametros['accion']);
                
-                echo $rowdata;
+            echo $rowdata;
             
-        }
-        catch(Exception $ex ){
-          echo clsViewData::showError($ex->getCode(), $ex->getMessage());            
-        }
-        
-        break;
+            break;
         
     case 2:
             $valida = [
@@ -109,7 +109,20 @@ switch ($paramAccion){
             
             echo $rowdata;
             
-            break;       
+            break;     
+        
+    case 3:
+           $valida = [
+               'accion'          => ['filter'        => FILTER_VALIDATE_INT],
+               'imp_codigo'      => ['filter'        => FILTER_VALIDATE_INT]];
+        
+            $parametros = filter_var_array($Variables, $valida);
+     
+            $rowdata = $luo_importar->lst_replicar($parametros['accion'],$parametros['imp_codigo']);
+            
+            echo $rowdata;
+            
+            break;
 }
 
 unset($luo_importar);

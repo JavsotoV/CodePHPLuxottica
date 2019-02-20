@@ -80,6 +80,20 @@ switch ($paramAccion){
         echo $rowdata;
         
         break;
+    
+    //----listado del encargo por grupo segun reprogramacion ---------
+    case 4:
+        $valida =[
+            'encargo'   => ['filter'    => FILTER_UNSAFE_RAW]
+        ];
+        
+        $parametros = filter_var_array($Variables,$valida);
+        
+        $rowdata = $luo_rpro->lst_encargogrupo($parametros['encargo']);
+        
+        echo $rowdata;
+        
+        break;
 }
 
 unset($luo_rpro);

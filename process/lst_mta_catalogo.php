@@ -104,6 +104,7 @@ switch ($paramAccion){
                 'gfa_curvabase'     => ['filter'        => FILTER_VALIDATE_FLOAT],
                 'gfa_puente'        => ['filter'        => FILTER_VALIDATE_FLOAT],
                 'gfa_largovarilla'  => ['filter'        => FILTER_VALIDATE_FLOAT],
+                'gfa_polarized'     => ['filter'        => FILTER_UNSAFE_RAW],
                 'len_marca'         => ['filter'        => FILTER_UNSAFE_RAW],
                 'len_zonaop'        => ['filter'        => FILTER_VALIDATE_FLOAT],
                 'len_eje'           => ['filter'        => FILTER_VALIDATE_FLOAT],
@@ -142,12 +143,13 @@ switch ($paramAccion){
                 'criterio'      => ['filter'    => FILTER_UNSAFE_RAM],
                 'esf_codigo'    => ['filter'    => FILTER_VALIDATE_INT],
                 'cil_codigo'    => ['filter'    => FILTER_VALIDATE_INT],
+                'descatalogado' => ['filter'    => FILTER_UNSAFE_RAM],
                 'page'          => ['filter'    => FILTER_VALIDATE_INT],
                 'limit'         => ['filter'    => FILTER_VALIDATE_INT]];
         
         $parametros = filter_var_array($Variables,$valida);
         
-        $rowdata = $luo_catalogo->lst_listar($parametros['pai_codigo'],$parametros['tipfamcod'],$parametros['fam_codigo'],$parametros['sfa_codigo'],$parametros['gfa_codigo'], $parametros['criterio'],$parametros['esf_codigo'],$parametros['cil_codigo'],(($parametros['page'] -1) * $parametros['limit']) , $parametros['limit']);
+        $rowdata = $luo_catalogo->lst_listar($parametros['pai_codigo'],$parametros['tipfamcod'],$parametros['fam_codigo'],$parametros['sfa_codigo'],$parametros['gfa_codigo'], $parametros['criterio'],$parametros['esf_codigo'],$parametros['cil_codigo'],$parametros['descatalogado'],(($parametros['page'] -1) * $parametros['limit']) , $parametros['limit']);
         
         echo $rowdata;
         

@@ -175,4 +175,43 @@ class clstrkReprogramacion {
         }
         
     }
+    
+    public function lst_encargogrupo($as_encargo_pos){
+        try{
+            $luo_con = new DbSql();
+            
+            $ls_sql="sp_trk_lst_encargonumero";
+                                 
+            if(!$luo_con->createConexion()){return clsViewData::showError(-1,'Error de conexion SQL');}
+            
+           $stmt=mssql_init($ls_sql,$luo_con->refConexion);
+            
+            if (!$stmt){
+                
+                $luo_con->closeConexion();
+                
+                return clsViewData::showError(-1, 'Error iniciando procedimiento sp_trk_lst_reprogramacion');
+            }
+            
+            $rstpar = mssql_bind($stmt,'@as_encargo_pos',$as_encargo_pos,SQLVARCHAR,false,false,20);
+            
+            $result = $luo_con->sqlsrvExecute($stmt);
+            
+            if (!$result){return clsViewData::showError(-1, 'error ejecutando procedimiento sp_trk_lst_encargonumero');}
+            
+            $rowdata= clsViewData::viewData( mssqlparsear($result),false);
+           
+            mssql_free_statement($stmt);
+            
+            $luo_con->closeConexion();
+             
+            unset($luo_con);
+             
+            return $rowdata;
+
+        }
+        catch(Exception $ex){
+            return clsViewData::showError($ex->getCode(), $ex->getMessage());
+        }
+    }
 }

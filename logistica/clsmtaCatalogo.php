@@ -53,6 +53,7 @@ class clsmtaCatalogo {
     private $_gfa_curvabase;
     private $_gfa_puente;
     private $_gfa_largovarilla;
+    private $_gfa_polarized;
     private $_len_marca;
     private $_len_zonaop;
     private $_len_eje;
@@ -108,6 +109,7 @@ function __construct($an_usuario) {
     $this->_gfa_curvabase=0;
     $this->_gfa_puente=0;
     $this->_gfa_largovarilla=0;
+    $this->_gfa_polarized='N';
     $this->_len_marca='';
     $this->_len_zonaop=0;
     $this->_len_eje=0;
@@ -161,6 +163,10 @@ function set_tipfamcod($_tipfamcod) {
 
 function set_gfa_codigo($_gfa_codigo) {
     $this->_gfa_codigo = validaNull($_gfa_codigo,0,'int');
+}
+
+function set_gfa_polarized($_gfa_polarized) {
+    $this->_gfa_polarized = $_gfa_polarized;
 }
 
 function set_alias($_alias) {
@@ -387,6 +393,7 @@ public function sp_mta_catalogo($an_accion){
                 to_number(:an_gfa_curvabase,'999,999,999.999'),
                 to_number(:an_gfa_puente,'999,999,999.999'),
                 to_number(:an_gfa_largovarilla,'999,999,999.999'),
+                :as_gfa_polarized,
                 :as_len_marca,
                 to_number(:an_len_zonaop,'999,999,999.999'),
                 to_number(:an_len_eje,'999,999,999.999'),
@@ -453,6 +460,7 @@ public function sp_mta_catalogo($an_accion){
            oci_bind_by_name($stid,':an_gfa_curvabase',$this->_gfa_curvabase,15);
            oci_bind_by_name($stid,':an_gfa_puente',$this->_gfa_puente,15);
            oci_bind_by_name($stid,':an_gfa_largovarilla',$this->_gfa_largovarilla,15);
+           oci_bind_by_name($stid,':an_gfa_polarized',$this->_gfa_polarized,10);
            oci_bind_by_name($stid,':as_len_marca',$this->_len_marca,60);
            oci_bind_by_name($stid,':an_len_zonaop',$this->_len_zonaop,15);
            oci_bind_by_name($stid,':an_len_eje',$this->_len_eje,15);
@@ -501,7 +509,7 @@ public function sp_mta_catalogo($an_accion){
 }
 
 
-    public function lst_listar($an_pai_codigo,$as_tipfamcod,$an_fam_codigo,$an_sfa_codigo,$an_gfa_codigo,$as_criterio,$an_esf_codigo,$an_cil_codigo,$an_start,$an_limit){
+    public function lst_listar($an_pai_codigo,$as_tipfamcod,$an_fam_codigo,$an_sfa_codigo,$an_gfa_codigo,$as_criterio,$an_esf_codigo,$an_cil_codigo,$as_descatalogado,$an_start,$an_limit){
         
         try{
              $ln_rowcount=0;
@@ -517,6 +525,7 @@ public function sp_mta_catalogo($an_accion){
                             :as_criterio,
                             :an_esf_codigo,
                             :an_cil_codigo,
+                            :as_descatalogado,
                             :an_start,
                             :an_limit);
                     end;";
@@ -539,6 +548,7 @@ public function sp_mta_catalogo($an_accion){
              oci_bind_by_name($stid,':as_criterio',$as_criterio,120);
              oci_bind_by_name($stid,':an_esf_codigo',$an_esf_codigo,10);
              oci_bind_by_name($stid,':an_cil_codigo',$an_cil_codigo,10);
+             oci_bind_by_name($stid,':as_descatalogado',$as_descatalogado,10);
              oci_bind_by_name($stid,':an_start',$an_start,10);
              oci_bind_by_name($stid,':an_limit',$an_limit,10);
             

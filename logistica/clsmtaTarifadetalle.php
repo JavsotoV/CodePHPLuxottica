@@ -116,7 +116,60 @@ class clsmtaTarifadetalle {
         }
     }
 
-        
+    public function lst_listar($an_trf_codigo,$as_tipfamcod,$an_fam_codigo,$an_sfa_codigo,$an_gfa_codigo,$as_criterio,$an_start,$an_limit) {
+        try{
+            $ln_rowcount=0;
+            
+            $ls_sql="begin
+                        pck_mta_tarifadetalle.sp_lst_listar (:acr_cursor,
+                            :ln_rowcount,
+                            :an_trf_codigo,
+                            :as_tipfamcod,
+                            :an_fam_codigo,
+                            :an_sfa_codigo,
+                            :an_gfa_codigo,
+                            :as_criterio,
+                            :an_start,
+                            :an_limit);
+                    end;";
+            
+            $luo_con = new Db();
+            
+            $luo_set = new clsReference();
+            
+            if(!$luo_set->setcrsLst($luo_con, $ls_sql, $stid, $curs)){
+                return clsViewData::showError($luo_con->getICodeError(),$luo_con->getSMsgError());
+            }
+            
+             oci_bind_by_name($stid,':acr_cursor',$curs,-1,OCI_B_CURSOR)or die(oci_error($luo_con->refConexion));
+             oci_bind_by_name($stid,':ln_rowcount',$ln_rowcount,10);
+             oci_bind_by_name($stid,':an_trf_codigo',$an_trf_codigo,10);
+             oci_bind_by_name($stid,':as_tipfamcod',$as_tipfamcod,10);
+             oci_bind_by_name($stid,':an_fam_codigo',$an_fam_codigo,10);
+             oci_bind_by_name($stid,':an_sfa_codigo',$an_sfa_codigo,10);
+             oci_bind_by_name($stid,':an_gfa_codigo',$an_gfa_codigo,10);
+             oci_bind_by_name($stid,':as_criterio',$as_criterio,60);
+             oci_bind_by_name($stid,':an_start',$an_start,10);
+             oci_bind_by_name($stid,':an_limit',$an_limit,10);
+             
+             if(!$luo_con->ociExecute($stid)){return clsViewData::showError($luo_con->getICodeError(), $luo_con->getSMsgError());}
+             
+             $rowdata= clsViewData::viewData(parsearcursor($curs),false,$ln_rowcount);
+             
+             oci_free_statement($stid);
+             
+             $luo_con->closeConexion();
+             
+             unset($luo_con);
+             
+             return $rowdata;
+            
+        }catch(Exception $ex){
+            return clsViewData::showError($ex->getCode(), $ex->getMessage());
+        }
+    }   
+    
+    
     public function lst_precioarticulo($an_cta_codigo){
         try{
             $ls_sql="begin
@@ -124,7 +177,7 @@ class clsmtaTarifadetalle {
                         :an_cta_codigo) ;
                      end;";
             
-             $luo_con = new Db();
+            $luo_con = new Db();
             
             $luo_set = new clsReference();
             

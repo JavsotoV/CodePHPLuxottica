@@ -55,6 +55,7 @@ class clsmtaImportar {
     private $_puente;
     private $_curvabase;
     private $_largovarilla;
+    private $_polarized;
     private $_diagonal;
     private $_horiz;
     private $_colorc;
@@ -65,6 +66,9 @@ class clsmtaImportar {
     private $_zonaop;
     private $_eje;
     private $_radio;
+    private $_tarifa;
+    private $_precio;
+    private $_precioiva;
     
     function __construct($an_imp_usuario) {
         $this->_imp_codigo=0;
@@ -98,6 +102,7 @@ class clsmtaImportar {
         $this->_puente=[];
         $this->_curvabase=[];
         $this->_largovarilla=[];
+        $this->_polarized=[];
         $this->_diagonal=[];
         $this->_horiz=[];
         $this->_colorc=[];
@@ -108,6 +113,9 @@ class clsmtaImportar {
         $this->_zonaop=[];
         $this->_eje=[];
         $this->_radio=[];
+        $this->_tarifa=[];
+        $this->_precio=[];
+        $this->_precioiva=[];
     }
     
     function set_imp_codigo($_imp_codigo) {
@@ -119,7 +127,7 @@ class clsmtaImportar {
     }
 
     function set_tipfamcod($_tipfamcod) {
-        $this->_tipfamcod = $_tipfamcod;
+        $this->_tipfamcod = validaNull($_tipfamcod, '0', 'string');
     }
 
     function set_imp_origen($_imp_origen) {
@@ -242,6 +250,10 @@ class clsmtaImportar {
         $this->_largovarilla = $_largovarilla;
     }
 
+    function set_polarized($_polarized) {
+        $this->_polarized = $_polarized;
+    }
+
     function set_diagonal($_diagonal) {
         $this->_diagonal = $_diagonal;
     }
@@ -282,6 +294,18 @@ class clsmtaImportar {
         $this->_radio = $_radio;
     }
 
+    function set_tarifa($_tarifa) {
+        $this->_tarifa = $_tarifa;
+    }
+
+    function set_precio($_precio) {
+        $this->_precio = $_precio;
+    }
+
+    function set_precioiva($_precioiva) {
+        $this->_precioiva = $_precioiva;
+    }
+
         
     public function loadData ( $lstParametros ){
         foreach ( $lstParametros as $key => $value) {
@@ -312,35 +336,39 @@ class clsmtaImportar {
                             :as_grupofam,           
                             :as_descatalogado,
                             :as_alias,
-                            to_number(:an_ivacb,'999,999.999'),
-                            to_number(:an_priprov,'999,999.999'),
+                            :an_ivacb,
+                            :an_priprov,
                             :as_nomcom,
                             :as_inventariar,
                             :as_liquidacion,
                             :as_etiquetar,
                             :as_colores,
                             :as_material,
-                            to_number(:an_desdediametro,'999,999.999'),
-                            to_number(:an_hastadiametro,'999,999.999'),
-                            to_number(:an_desdecilindro,'999,999.999'),
-                            to_number(:an_hastacilindro,'999,999.999'),
-                            to_number(:an_desdeesfera,'999,999.999'),
-                            to_number(:an_hastaesfera,'999,999.999'),
-                            to_number(:an_altura,'999,999.999'),
-                            to_number(:an_calibre,'999,999.999'),
-                            to_number(:an_puente,'999,999.999'),
-                            to_number(:an_curvabase,'999,999.999'),
-                            to_number(:an_largovarilla,'999,999.999'),
-                            to_number(:an_diagonal,'999,999.999'),
-                            to_number(:an_horiz,'999,999.999'),
+                            :an_desdediametro,
+                            :an_hastadiametro,
+                            :an_desdecilindro,
+                            :an_hastacilindro,
+                            :an_desdeesfera,
+                            :an_hastaesfera,
+                            :an_altura,
+                            :an_calibre,
+                            :an_puente,
+                            :an_curvabase,
+                            :an_largovarilla,
+                            :as_polarized,
+                            :an_diagonal,
+                            :an_horiz,
                             :as_colorc,
                             :as_colorm,
                             :as_graduable,
                             :as_sexo,
                             :as_marca,
-                            to_number(:an_zonaop,'999,999.999'), 
-                            to_number(:an_eje,'999,999.999'),
-                            to_number(:an_radio,'999,999.999'),
+                            :an_zonaop,
+                            :an_eje,
+                            :an_radio,
+                            :as_tarifa,
+                            :an_precio,
+                            :an_precioiva,
                             :an_imp_usuario);
                     end;";
             
@@ -392,6 +420,7 @@ class clsmtaImportar {
             oci_bind_array_by_name($stid,':an_puente',$this->_puente,$ln_count,-1,SQLT_FLT);
             oci_bind_array_by_name($stid,':an_curvabase',$this->_curvabase,$ln_count,-1,SQLT_FLT);
             oci_bind_array_by_name($stid,':an_largovarilla',$this->_largovarilla,$ln_count,-1,SQLT_FLT);
+            oci_bind_array_by_name($stid,':as_polarized',$this->_polarized,$ln_count,-1,SQLT_CHR);
             oci_bind_array_by_name($stid,':an_diagonal',$this->_diagonal,$ln_count,-1,SQLT_FLT);
             oci_bind_array_by_name($stid,':an_horiz',$this->_horiz,$ln_count,-1,SQLT_FLT);
             oci_bind_array_by_name($stid,':as_colorc',$this->_colorc,$ln_count,-1,SQLT_CHR);
@@ -402,9 +431,12 @@ class clsmtaImportar {
             oci_bind_array_by_name($stid,':an_zonaop',$this->_zonaop,$ln_count,-1,SQLT_FLT);
             oci_bind_array_by_name($stid,':an_eje',$this->_eje,$ln_count,-1,SQLT_FLT);
             oci_bind_array_by_name($stid,':an_radio',$this->_radio,$ln_count,-1,SQLT_FLT);
+            oci_bind_array_by_name($stid,':as_tarifa',$this->_tarifa,$ln_count,-1,SQLT_CHR);
+            oci_bind_array_by_name($stid,':an_precio',$this->_precio,$ln_count,-1,SQLT_FLT);
+            oci_bind_array_by_name($stid,':an_precioiva',$this->_precioiva,$ln_count,-1,SQLT_FLT);
             oci_bind_by_name($stid,':an_imp_usuario',$this->_imp_usuario,10);           
             
-              if(!$luo_set->ReadcrsMant($luo_con, $stid, $crto)){
+            if(!$luo_set->ReadcrsMant($luo_con, $stid, $crto)){
                 return clsViewData::showError($luo_con->getICodeError(),$luo_con->getSMsgError());
             }
             
@@ -426,6 +458,55 @@ class clsmtaImportar {
                    
             return $rowdata;         
             
+        }
+        catch(Exception $ex){
+            return clsViewData::showError($ex->getCode(), $ex->getMessage());
+        }
+    }
+    
+    public function lst_replicar($an_accion,$an_imp_codigo){
+        try{
+            $ls_sql="begin
+                        pck_mta_importar.sp_mta_replicar (:an_accion, 
+                            :acr_retorno,
+                            :an_imp_codigo,
+                            :an_imp_usuario);
+                    end;";
+            
+            $luo_con= new  Db();
+            
+            $luo_set = new clsReference();
+            
+            if(!$luo_set->setcrsMant($luo_con, $ls_sql, $stid, $crto, $curs)){
+                return clsViewData::showError($luo_con->getICodeError(),$luo_con->getSMsgError());
+            };
+            
+            oci_bind_by_name($stid,':an_accion',$an_accion,10) or die(oci_error($luo_con->refConexion));
+            oci_bind_by_name($stid,':acr_retorno',$crto,-1,OCI_B_CURSOR) or die(oci_error($luo_con->refConexion));
+            oci_bind_by_name($stid,':an_imp_codigo',$an_imp_codigo,10);
+            oci_bind_by_name($stid,':an_imp_usuario',$this->_imp_usuario,10);
+            
+            if(!$luo_set->ReadcrsMant($luo_con, $stid, $crto)){
+                return clsViewData::showError($luo_con->getICodeError(),$luo_con->getSMsgError());
+            }
+            
+            $luo_con->commitTransaction();
+            
+            $lstData = [];
+                
+            $rowdata = clsViewData::viewData($lstData, false, 1, $luo_con->getMsgRetorno());
+                 
+            oci_free_statement($crto);
+            
+            oci_free_statement($stid);
+            
+            $luo_con->closeConexion();
+            
+            unset($luo_con);
+            
+            unset($luo_set);
+                   
+            return $rowdata;
         }
         catch(Exception $ex){
             return clsViewData::showError($ex->getCode(), $ex->getMessage());
