@@ -460,7 +460,7 @@ public function sp_mta_catalogo($an_accion){
            oci_bind_by_name($stid,':an_gfa_curvabase',$this->_gfa_curvabase,15);
            oci_bind_by_name($stid,':an_gfa_puente',$this->_gfa_puente,15);
            oci_bind_by_name($stid,':an_gfa_largovarilla',$this->_gfa_largovarilla,15);
-           oci_bind_by_name($stid,':an_gfa_polarized',$this->_gfa_polarized,10);
+           oci_bind_by_name($stid,':as_gfa_polarized',$this->_gfa_polarized,10);
            oci_bind_by_name($stid,':as_len_marca',$this->_len_marca,60);
            oci_bind_by_name($stid,':an_len_zonaop',$this->_len_zonaop,15);
            oci_bind_by_name($stid,':an_len_eje',$this->_len_eje,15);
