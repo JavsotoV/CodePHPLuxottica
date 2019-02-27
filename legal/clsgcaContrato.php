@@ -17,6 +17,7 @@
 require_once("../Base/Db.php");
 require_once("../Base/fncscript.php");
 require_once("../Base/clsViewData.php");
+require_once("clsgcaEnviarEmail.php");
 
 class clsgcaContrato {
     //put your code here
@@ -518,6 +519,15 @@ class clsgcaContrato {
             $luo_con->closeConexion();
             
             unset($luo_con);
+            
+            if ($an_accion==2){
+                
+                $luo_email = new clsgcaEnviarEmail($rowdata);
+                
+                $luo_email->EditContrato();  
+                
+                unset($luo_email);
+            }
                    
             return $rowdata;           
             
