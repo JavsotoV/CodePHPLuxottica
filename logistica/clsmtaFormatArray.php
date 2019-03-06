@@ -38,6 +38,26 @@ class clsmtaFormatArray {
                                 'codsap'          => '@');
      }
      
+     public function lstCatalogo(&$lstArrayHeader,&$lstArrayHeaderWith,&$lstArrayFormat){
+         $lstArrayHeader= Array(
+             'cdg'                  => 'CDG',       
+             'codsap'               => 'COD. SAP',
+             'descripcion'          => 'DESCRIPCION',
+             'familia'              => 'FAMILIA',
+             'subfam'               => 'SUB. FAMILIA',
+             'grupofam'             => 'GRUPO FAMILIA',
+             'trf_cdg'              => 'TARIFA',
+             'trd_precio'           => 'PRECIO',
+             'trd_precioiva'        => 'PRECIO IVA');
+         
+          $lstArrayHeaderWith=Array(20,20,100,15,15,15,20,20);
+          
+          $lstArrayFormat=Array('codsap'          => '@',
+                                'cdg'             => '@',
+                                'trd_precio'      => '#,##0.00',
+                                'trd_precioiva'   => '#,##0.00');
+     }
+     
      public function lstTarifaDetalle(&$lstArrayHeader,&$lstArrayHeaderWith,&$lstArrayFormat){
          $lstArrayHeader= Array(
              'pai_denominacion'     => 'REGION',

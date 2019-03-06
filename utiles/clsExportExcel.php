@@ -40,7 +40,7 @@ class clsExportExcel {
         catch(Exception $ex){
             header('Content-Type: application/text');
             header('Content-Disposition: attachment;filename="error.txt"');
-            print_r($ex->getMessage());
+        
         }
     }
     

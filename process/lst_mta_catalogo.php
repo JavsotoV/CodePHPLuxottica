@@ -182,6 +182,21 @@ switch ($paramAccion){
         echo $rowdata;
         
         break;
+    
+    case 5:          
+        $valida=[
+                'pai_codigo'    => ['filter'    => FILTER_VALIDATE_INT],
+                'criterio'      => ['filter'    => FILTER_UNSAFE_RAM],
+                'page'          => ['filter'    => FILTER_VALIDATE_INT],
+                'limit'         => ['filter'    => FILTER_VALIDATE_INT]];
+        
+        $parametros = filter_var_array($Variables,$valida);
+        
+        $rowdata = $luo_catalogo->lst_devolucion($parametros['pai_codigo'],$parametros['criterio'],(($parametros['page'] -1) * $parametros['limit']) , $parametros['limit']);
+        
+        echo $rowdata;
+        
+        break;
 }
 
 unset($luo_catalogo);

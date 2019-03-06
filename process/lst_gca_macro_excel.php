@@ -90,8 +90,7 @@
         
         unset($luo_excel);
         unset($luo_session);
-        unset($luo_macro);
-        
+        unset($luo_macro);      
         
     
 ?>

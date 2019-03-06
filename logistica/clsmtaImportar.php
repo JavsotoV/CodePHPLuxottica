@@ -372,7 +372,53 @@ class clsmtaImportar {
                             :an_imp_usuario);
                     end;";
             
-            $ln_count = count($this->_cdg);
+            if ($an_accion==1){$ln_count = count($this->_cdg);}
+            
+            if ($an_accion==3){
+                  $ln_count=1;
+                  $this->_cdg=array('0');
+                  $this->_codigobarras=array('0');
+                  $this->_codsap=array('0');
+                  $this->_descripcion=array('0');
+                  $this->_familia=array('0');
+                  $this->_subfam=array('0');
+                  $this->_grupofam=array('0');
+                  $this->_descatalogado=array('0');
+                  $this->_alias=array('0');
+                  $this->_ivacb=array('0');
+                  $this->_priprov=array('0');
+                  $this->_nomcom=array('0');
+                  $this->_inventariar=array('0');
+                  $this->_liquidacion=array('0');
+                  $this->_etiquetar=array('0');
+                  $this->_colores=array('0');
+                  $this->_material=array('0');
+                  $this->_desdediametro=array('0');
+                  $this->_hastadiametro=array('0');
+                  $this->_desdecilindro=array('0');
+                  $this->_hastacilindro=array('0');
+                  $this->_desdeesfera=array('0');
+                  $this->_hastaesfera=array('0');
+                  $this->_altura=array('0');
+                  $this->_calibre=array('0');
+                  $this->_puente=array('0');
+                  $this->_curvabase=array('0');
+                  $this->_largovarilla=array('0');
+                  $this->_polarized=array('0');
+                  $this->_diagonal=array('0');
+                  $this->_horiz=array('0');
+                  $this->_colorc=array('0');
+                  $this->_colorm=array('0');
+                  $this->_graduable=array('0');
+                  $this->_sexo=array('0');
+                  $this->_marca=array('0');       
+                  $this->_zonaop=array('0');
+                  $this->_eje=array('0');
+                  $this->_radio=array('0');
+                  $this->_tarifa=array('0');
+                  $this->_precio=array('0');
+                  $this->_precioiva=array('0');
+            }
             
             if ($ln_count<1){return clsViewData::showError(-1,'Array sin elementos');}
             
