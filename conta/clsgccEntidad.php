@@ -84,7 +84,7 @@ class clsgccEntidad {
                             :an_per_codigo,
                             :an_per_responsable,
                             :an_mon_codigo,
-                            :an_ent_importe,
+                            to_number(:an_ent_importe,'999,999,999,999.999'),
                             :an_ent_usuario) ;
                     end;";
             

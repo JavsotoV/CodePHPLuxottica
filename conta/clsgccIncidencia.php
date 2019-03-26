@@ -15,6 +15,7 @@ require_once("../Base/Db.php");
 require_once("../Base/fncscript.php");
 require_once("../Base/clsViewData.php");
 require_once("../Base/clsReference.php");
+require_once("clsgccEnviarEmail.php");
 
 class clsgccIncidencia {
     //put your code here
@@ -57,8 +58,9 @@ class clsgccIncidencia {
     public function sp_gcc_incidencia($an_accion){
         try{
             $ls_sql="begin
-                        pck_gcc_incidencia.sp_gcc_incidencia (  :an_accion,
+                        pck_gcc_incidencia.sp_gcc_incidencia (:an_accion,
                             :acr_retorno,
+                            :acr_cursor,
                             :an_ren_codigo,
                             :an_red_codigo,
                             :as_inc_observacion,
@@ -76,6 +78,7 @@ class clsgccIncidencia {
             
             oci_bind_by_name($stid,':an_accion',$an_accion,10) or die(oci_error($luo_con->refConexion));
             oci_bind_by_name($stid,':acr_retorno',$crto,-1,OCI_B_CURSOR) or die(oci_error($luo_con->refConexion));
+            oci_bind_by_name($stid,':acr_cursor',$curs,-1,OCI_B_CURSOR) or die(oci_error($luo_con->refConexion));
             oci_bind_by_name($stid,':an_ren_codigo',$this->_ren_codigo,10);
             oci_bind_by_name($stid,':an_red_codigo',$this->_red_codigo,10);
             oci_bind_by_name($stid,':as_inc_observacion',$this->_inc_observacion,120);
@@ -88,7 +91,7 @@ class clsgccIncidencia {
             
             $luo_con->commitTransaction();
             
-            $lstData =[];
+            $lstData =( $this->_red_codigo == 0 ? parsearcursor($curs) : [] );
                 
             $rowdata = clsViewData::viewData($lstData, false, 1, $luo_con->getMsgRetorno());
                  
@@ -97,6 +100,16 @@ class clsgccIncidencia {
             oci_free_statement($stid);
             
             $luo_con->closeConexion();
+            
+            // --- enviar email ------
+            if ($this->_red_codigo==0){
+               
+                $luo_email = new clsgccEnviarEmail($rowdata);
+                
+                $luo_email->RendicionNotificacion();
+                
+                unset($luo_email);
+            }
             
             unset($luo_con);
             

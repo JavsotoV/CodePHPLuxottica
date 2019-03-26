@@ -60,20 +60,17 @@ class clsmtaFormatArray {
      
      public function lstTarifaDetalle(&$lstArrayHeader,&$lstArrayHeaderWith,&$lstArrayFormat){
          $lstArrayHeader= Array(
-             'pai_denominacion'     => 'REGION',
              'trf_cdg'              => 'TARIFA',
-             'trf_descripcion'      => 'DES. TARIFA',
+             'cdg'                  => 'COD. ART',           
              'codsap'               => 'COD. SAP',
              'descripcion'          => 'DESCRIPCION',
-             'familia'              => 'FAMILIA',
-             'subfam'               => 'SUB. FAMILIA',
-             'grupofam'             => 'GRUPO FAMILIA',
              'trd_precio'           => 'PRECIO',
              'trd_precioiva'        => 'PRECIO IVA');
          
-         $lstArrayHeaderWith=Array(100,20,100,20,20,100,30,30,30,30);
+         $lstArrayHeaderWith=Array(15,20,20,80,20,20);
          
-             $lstArrayFormat=Array('codsap'          => '@',
+             $lstArrayFormat=Array('cdg'             => '@',
+                                   'codsap'          => '@',
                                    'trd_precio'      => '#,##0.00',
                                    'trd_precioiva'   => '#,##0.00');
      }

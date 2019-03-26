@@ -26,6 +26,7 @@ class clsgccConcepto {
     
     function __construct($an_cpt_usuario) {
         $this->_cpt_usuario=$an_cpt_usuario;
+        $this->_cpt_descripcion='';
     }
     
     function set_cpt_codigo($_cpt_codigo) {
@@ -33,7 +34,7 @@ class clsgccConcepto {
     }
 
     function set_cpt_descripcion($_cpt_descripcion) {
-        $this->_cpt_descripcion = $_cpt_descripcion;
+        $this->_cpt_descripcion =  mb_strtoupper($_cpt_descripcion,'utf-8');
     }
     
     function set_cta_numero($_cta_numero) {
@@ -52,16 +53,15 @@ class clsgccConcepto {
     public function sp_gcc_concepto($an_accion){
         try{
             $ls_sql="begin
-                            pck_gcc_concepto.sp_gcc_concepto (  :an_accion,
+                            pck_gcc_concepto.sp_gcc_concepto (:an_accion,
                                 :acr_retorno,
-                                :acr_cursor,
                                 :an_cpt_codigo,
                                 :as_cpt_descripcion,
                                 :as_cta_numero,
                                 :an_cpt_usuario);
                     end;";
             
-             $luo_con = new Db();
+            $luo_con = new Db();
             
             $luo_set = new clsReference();
             
@@ -71,9 +71,8 @@ class clsgccConcepto {
             
             oci_bind_by_name($stid,':an_accion',$an_accion,10) or die(oci_error($luo_con->refConexion));
             oci_bind_by_name($stid,':acr_retorno',$crto,-1,OCI_B_CURSOR) or die(oci_error($luo_con->refConexion));
-            oci_bind_by_name($stid,':acr_cursor',$curs,-1,OCI_B_CURSOR) or die(oci_error($luo_con->refConexion));
             oci_bind_by_name($stid,':an_cpt_codigo',$this->_cpt_codigo,10);
-            oci_bind_by_name($stid,':an_cpt_descripcion',$this->_cpt_descripcion,120);
+            oci_bind_by_name($stid,':as_cpt_descripcion',$this->_cpt_descripcion,120);
             oci_bind_by_name($stid,':as_cta_numero',$this->_cta_numero,20);
             oci_bind_by_name($stid,':an_cpt_usuario',$this->_cpt_usuario,10);
             
@@ -83,7 +82,7 @@ class clsgccConcepto {
             
             $luo_con->commitTransaction();
             
-            $lstData = ( $an_accion != 3 ? parsearcursor($curs) : [] );
+            $lstData = [];
                 
             $rowdata = clsViewData::viewData($lstData, false, 1, $luo_con->getMsgRetorno());
                  

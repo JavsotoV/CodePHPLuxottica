@@ -34,9 +34,16 @@ class clsglbPersona {
     private $_dom_descripcion;
     private $_ubg_codigo;
     private $_per_representante;
+    private $_ema_denominacion;
 
     function __construct() {
         $this->per_codigo=0;
+        $this->_per_apaterno='';
+        $this->_per_amaterno='';
+        $this->_per_pnombre='';
+        $this->_per_snombre='';
+        $this->_per_fechanac='01/01/1900';
+        $this->_per_genero=1;
     }
     
     function set_per_codigo($_per_codigo) {
@@ -48,19 +55,19 @@ class clsglbPersona {
     }
 
     function set_per_apaterno($_per_apaterno) {            
-        $this->_per_apaterno = mb_strtoupper($_per_apaterno,'utf-8');
+        $this->_per_apaterno = validaNull(mb_strtoupper($_per_apaterno,'utf-8'));
     }
 
     function set_per_amaterno($_per_amaterno) {
-        $this->_per_amaterno = mb_strtoupper($_per_amaterno,'utf-8');
+        $this->_per_amaterno = validaNull(mb_strtoupper($_per_amaterno,'utf-8'));
     }
 
     function set_per_pnombre($_per_pnombre) {
-        $this->_per_pnombre = mb_strtoupper($_per_pnombre,'utf-8');
+        $this->_per_pnombre = validaNull(mb_strtoupper($_per_pnombre,'utf-8'));
     }
 
     function set_per_snombre($_per_snombre) {
-        $this->_per_snombre = mb_strtoupper($_per_snombre,'utf-8');
+        $this->_per_snombre = validaNull(mb_strtoupper($_per_snombre,'utf-8'));
     }
 
     function set_per_razonsocial($_per_razonsocial) {
@@ -76,11 +83,11 @@ class clsglbPersona {
     }
 
     function set_per_genero($_per_genero) {
-        $this->_per_genero = $_per_genero;
+        $this->_per_genero = validaNull($_per_genero,1,'int');
     }
 
     function set_per_fechanac($_per_fechanac) {
-        $this->_per_fechanac = $_per_fechanac;
+        $this->_per_fechanac = validaNull($_per_fechanac,'01/01/1900','date');
     }
 
     function set_pai_codigo($_pai_codigo) {
@@ -103,7 +110,10 @@ class clsglbPersona {
         $this->_per_representante = validaNull($_per_representante,0,'int');
     }
 
-    
+    function set_ema_denominacion($_ema_denominacion) {
+        $this->_ema_denominacion = mb_strtolower($_ema_denominacion,'utf-8');
+    }
+        
     function loadData ( $lstParametros ){
         foreach ( $lstParametros as $key => $value) {
             $method = 'set_' . ucfirst(strtolower( $key ) );
@@ -126,6 +136,7 @@ class clsglbPersona {
                 $this->_per_amaterno='';
                 $this->_per_pnombre='';
                 $this->_per_snombre='';
+                $this->_per_fechanac='01/01/1900';
                 $this->_per_genero=1;
             }
             
@@ -145,12 +156,13 @@ class clsglbPersona {
                     :an_tpo_codigo,
                     :as_per_nrodocidentidad,
                     :an_per_genero,
-                    :ad_per_fechanac,
+                    to_date(:ad_per_fechanac,'dd/mm/yyyy'),
                     :an_pai_codigo,
                     :an_dom_codigo,
                     :as_dom_descripcion,
                     :an_ubg_codigo,
                     :an_per_representante,
+                    :as_ema_denominacion,
                     :an_per_usuario);
                     end;";
             
@@ -182,10 +194,15 @@ class clsglbPersona {
             oci_bind_by_name($stid,':as_dom_descripcion',$this->_dom_descripcion,120);
             oci_bind_by_name($stid,':an_ubg_codigo',$this->_ubg_codigo,10);
             oci_bind_by_name($stid,':an_per_representante',$this->_per_representante,10);
+            oci_bind_by_name($stid,':as_ema_denominacion',$this->_ema_denominacion,120);
             oci_bind_by_name($stid,':an_per_usuario',$an_usuario,10);
             
-            if(!$luo_con->ociExecute($stid)){return clsViewData::showError($luo_con->getICodeError(), $luo_con->getSMsgError());};            
-            if(!$luo_con->ociExecute($crto)){return clsViewData::showError($luo_con->getICodeError(), $luo_con->getSMsgError());};
+            if(!$luo_con->ociExecute($stid)){
+                return clsViewData::showError($luo_con->getICodeError(),$luo_con->getSMsgError());                
+            };            
+            if(!$luo_con->ociExecute($crto)){
+                return clsViewData::showError($luo_con->getICodeError(),$luo_con->getSMsgError());                
+            };
             
             if (!$luo_con->ocifetchRetorno($crto)){return clsViewData::showError($luo_con->getICodeError(), $luo_con->getSMsgError());}   
             
@@ -264,7 +281,7 @@ class clsglbPersona {
         }   
     }
     
-    public function lst_personaregion($an_pai_codigo,$as_criterio,$an_start,$an_limit){
+    public function lst_personaregion($an_pai_codigo,$an_prc_codigo,$an_org_codigo,$as_criterio,$an_start,$an_limit){
             
       try{
           $ln_rowcount=0;
@@ -275,6 +292,8 @@ class clsglbPersona {
                         :acr_cursor,
                         :ln_rowcount,
                         :an_pai_codigo,
+                        :an_prc_codigo,
+                        :an_org_codigo,
                         :as_criterio,
                         :an_start,
                         :an_limit); 
@@ -291,6 +310,8 @@ class clsglbPersona {
              oci_bind_by_name($stid,':acr_cursor',$curs,-1,OCI_B_CURSOR)or die(oci_error($luo_con->refConexion));
              oci_bind_by_name($stid,':ln_rowcount',$ln_rowcount,10);
              oci_bind_by_name($stid,':an_pai_codigo',$an_pai_codigo,10);
+             oci_bind_by_name($stid,':an_prc_codigo',$an_prc_codigo,10);
+             oci_bind_by_name($stid,':an_org_codigo',$an_org_codigo,10);
              oci_bind_by_name($stid,':as_criterio',$as_criterio,60);             
              oci_bind_by_name($stid,':an_start',$an_start,10);
              oci_bind_by_name($stid,':an_limit',$an_limit,10);

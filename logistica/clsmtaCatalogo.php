@@ -436,7 +436,7 @@ public function sp_mta_catalogo($an_accion){
            oci_bind_by_name($stid,':as_alias',$this->_alias,20);
            oci_bind_by_name($stid,':an_ivacb',$this->_ivacb,15);
            oci_bind_by_name($stid,':an_priprov',$this->_priprov,15);
-           oci_bind_by_name($stid,':as_nomcom',$this->_nomcom,25);
+           oci_bind_by_name($stid,':as_nomcom',$this->_nomcom,120);
            oci_bind_by_name($stid,':as_inventariar',$this->_inventariar,10);
            oci_bind_by_name($stid,':an_stock_minimo',$this->_stock_minimo,15);
            oci_bind_by_name($stid,':as_liquidacion',$this->_liquidacion,10);
@@ -480,7 +480,7 @@ public function sp_mta_catalogo($an_accion){
            oci_bind_by_name($stid,':an_cta_usuario',$this->_cta_usuario,10);
            
             if(!$luo_set->ReadcrsMant($luo_con, $stid, $crto)){
-                return clsViewData::showError(-1,'erroe');
+                return clsViewData::showError($luo_con->getICodeError(), $luo_con->getSMsgError());
             }
             
             $luo_con->commitTransaction();

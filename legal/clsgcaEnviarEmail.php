@@ -17,7 +17,7 @@ require_once("../utiles/fnUtiles.php");
 
 class clsgcaEnviarEmail {
     //put your code here
-    private $rowdata;
+    private $_rowdata;
     
     function __construct($rowdata) {
         $this->_rowdata= json_decode($rowdata,true) ;

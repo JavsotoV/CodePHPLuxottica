@@ -91,7 +91,7 @@ private $_cmp_usuario;
     }
 
     function set_cmp_serie($_cmp_serie) {
-        $this->_cmp_serie = $_cmp_serie;
+        $this->_cmp_serie = mb_strtoupper($_cmp_serie,'utf-8');
     }
 
     function set_cmp_numero($_cmp_numero) {
@@ -184,8 +184,6 @@ private $_cmp_usuario;
         
             if ( !is_array($_bin_blob) ){throw new Exception( 'No ha adjuntando ningun documento' );}
         
-     //      if (( $_bin_blob [ 'type' ] !== 'application/pdf' ) && ($_bin_blob [ 'type' ] !== 'image/jpeg' ) ){
-      //          throw new Exception( 'Solo se permite archivos PDF o JPG' );            
             if ( $_bin_blob [ 'size' ] > 50948388608 )
                 {throw new Exception( 'El peso maximo permitido es 20Mb', -10000 );}
       
@@ -193,8 +191,7 @@ private $_cmp_usuario;
         
                 $this->_bin_filename=$_bin_blob['name'];
         
-                $this->_bin_bandera=1;
-         //}
+                $this->_bin_bandera=1;     
      }
     
     public function loadData ( $lstParametros ){
@@ -240,11 +237,12 @@ private $_cmp_usuario;
                             :an_lqd_afectoimp,
                             :an_lqd_estado,
                             :ab_bin_blob,
-                            :as_bin_filename,
+                            :as_bin_filename,        
                             :as_cmp_uuid,
                             :an_cmp_usuario);
                     end;";
-          
+        
+        
             if ($an_accion!==3){
                 if ($this->_cmp_importe<=0){                
                     return clsViewData::showError(-1, 'No es posible registrar documento con importe en menor o igual a cero(0)');
@@ -290,6 +288,7 @@ private $_cmp_usuario;
                 
             $ln_count = count($this->_lqd_codigo);
             
+     
             oci_bind_by_name($stid,':an_accion',$an_accion,10);
             oci_bind_by_name($stid,':acr_retorno',$crto,-1,OCI_B_CURSOR);
             oci_bind_by_name($stid,':acr_cursor',$curs,-1,OCI_B_CURSOR);
@@ -325,15 +324,16 @@ private $_cmp_usuario;
             oci_bind_by_name($stid,':as_cmp_uuid',$this->_cmp_uuid,120);            
             oci_bind_by_name($stid,':an_cmp_usuario',$this->_cmp_usuario,10);
             
-             $result= oci_execute($stid,OCI_NO_AUTO_COMMIT);
+            $result= oci_execute($stid,OCI_NO_AUTO_COMMIT);
             
             if(!$result){
                 $error = oci_error($luo_con->refConexion);                
-                return clsViewData::showError($error['code'], $error['message']);}
+                print_r($error);
+                return clsViewData::showError(-1,'Error ejecutando paquete');}
             
             if(!oci_execute($crto)){
                 $error = oci_error($luo_con->refConexion);                
-                return clsViewData::showError($error['code'], $error['message']);
+                return clsViewData::showError(-1, 'Error ejecutado cursor');
             }
             
             if (!$luo_con->ocifetchRetorno($crto)){return clsViewData::showError($luo_con->getICodeError(), $luo_con->getSMsgError());}
