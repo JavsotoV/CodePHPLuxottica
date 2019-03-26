@@ -24,6 +24,7 @@ class clsprmPlantilla {
     private $_ctg_codigo;
     private $_cpt_codigo;
     private $_plt_aplicacion;
+    private $_plt_aplicar;
     private $_plt_grupo;
     private $_plt_usuario;
     private $_pld_codigo;
@@ -66,6 +67,10 @@ class clsprmPlantilla {
 
     function set_plt_aplicacion($_plt_aplicacion) {
         $this->_plt_aplicacion = $_plt_aplicacion;
+    }
+
+    function set_plt_aplicar($_plt_aplicar) {
+        $this->_plt_aplicar = $_plt_aplicar;
     }
 
     function set_plt_grupo($_plt_grupo) {
@@ -116,6 +121,7 @@ class clsprmPlantilla {
                             :an_ctg_codigo,
                             :an_cpt_codigo,
                             :an_plt_aplicacion,
+                            :an_plt_aplicar,
                             :an_plt_grupo,
                             :an_pld_codigo,
                             :an_pld_grupo,
@@ -155,6 +161,7 @@ class clsprmPlantilla {
            oci_bind_by_name($stid,':an_ctg_codigo',$this->_ctg_codigo,10);
            oci_bind_by_name($stid,':an_cpt_codigo',$this->_cpt_codigo,10);
            oci_bind_by_name($stid,':an_plt_aplicacion',$this->_plt_aplicacion,10);
+           oci_bind_by_name($stid,':an_plt_aplicar',$this->_plt_aplicar,10);
            oci_bind_by_name($stid,':an_plt_grupo',$this->_plt_grupo,10);
            oci_bind_array_by_name($stid,':an_pld_codigo',$this->_pld_codigo,$ln_count,-1,SQLT_INT);
            oci_bind_array_by_name($stid,':an_pld_grupo',$this->_pld_grupo,$ln_count,-1,SQLT_INT);
