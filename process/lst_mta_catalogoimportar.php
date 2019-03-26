@@ -45,7 +45,7 @@ $rowdata= [];
 
 $fil=0;
 $col=0;
-$filadata=7;
+$filadata=6;
 
 if ($imp_origen==1) {
     if ($tipfamcod=='C'){

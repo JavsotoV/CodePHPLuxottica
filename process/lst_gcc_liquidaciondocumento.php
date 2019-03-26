@@ -77,7 +77,7 @@ switch ($paramAccion){
                 ];
         
                 $parametros = filter_var_array($Variables,$valida);
-            
+                
                 try{
                     foreach ( $lstTmpFileUpload as $Data ){
                     if ( isset ( $_FILES [ $Data ] ) && ( $_FILES [ $Data ] [ 'tmp_name' ] !== '' ) ){

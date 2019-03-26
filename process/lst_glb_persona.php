@@ -43,7 +43,7 @@ switch ($paramAccion){
     //-------mantenimiento de persona-----------------------------------------
     case 1:
         $valida = [
-            'accion'                => [ 'filter' => FILTER_UNSAFE_RAW],
+            'accion'                => [ 'filter' => FILTER_VALIDATE_INT],
             'per_codigo'            => [ 'filter' => FILTER_VALIDATE_INT],
             'per_tipo'              => [ 'filter' => FILTER_UNSAFE_RAW],
             'per_apaterno'          => [ 'filter' => FILTER_UNSAFE_RAW],
@@ -59,13 +59,14 @@ switch ($paramAccion){
             'dom_codigo'            => [ 'filter' => FILTER_VALIDATE_INT],
             'dom_descripcion'       => [ 'filter' => FILTER_UNSAFE_RAW],
             'ubg_codigo'            => [ 'filter' => FILTER_VALIDATE_INT],
-            'per_representante'     => [ 'filter' => FILTER_VALIDATE_INT]             
+            'per_representante'     => [ 'filter' => FILTER_VALIDATE_INT],
+            'ema_denominacion'      => [ 'filter' => FILTER_VALIDATE_EMAIL]
         ];
         
         $parametros = filter_var_array($Variables, $valida);
         
-        $luo_persona->loadData($parametros);        
-           
+        $luo_persona->loadData($parametros);  
+        
         $rowdata = $luo_persona->glb_persona($parametros['accion'], $user_codigo);
         
         echo $rowdata;
@@ -94,7 +95,9 @@ switch ($paramAccion){
     case 3:
         
         $valida = [
-            'pai_codigo'    => ['filter'=> FILTER_VALIDATE_INT],
+            'pai_codigo'    => [ 'filter' => FILTER_VALIDATE_INT],
+            'prc_codigo'    => ['filter'  => FILTER_VALIDATE_INT], 
+            'org_codigo'    => [ 'filter' => FILTER_VALIDATE_INT],
             'criterio'      => [ 'filter' => FILTER_UNSAFE_RAW],
             'start'         => [ 'filter' => FILTER_VALIDATE_INT],
             'page'          => [ 'filter' => FILTER_VALIDATE_INT],
@@ -103,7 +106,7 @@ switch ($paramAccion){
 
         $parametros = filter_var_array($Variables, $valida);
         
-        $rowdata=$luo_persona->lst_personaregion($parametros['pai_codigo'],$parametros['criterio'], (($parametros['page'] -1) * $parametros['limit']) , $parametros['limit']);
+        $rowdata=$luo_persona->lst_personaregion($parametros['pai_codigo'],$parametros['prc_codigo'],$parametros['org_codigo'],$parametros['criterio'], (($parametros['page'] -1) * $parametros['limit']) , $parametros['limit']);
 
         echo $rowdata;
         

@@ -43,7 +43,7 @@ switch ($paramAccion){
         $parametros = filter_var_array($Variables,$valida);
         
         $luo_cpt->loadData($parametros);
-        
+           
         $rowdata = $luo_cpt->sp_gcc_concepto($parametros['accion']);
         
         echo $rowdata;
