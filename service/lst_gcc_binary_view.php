@@ -7,7 +7,7 @@
  */
     header( 'Content-type: text/html; charset=utf-8;' );
     
-    require_once ("../conta/clsgccComprobanteBinary.php");
+    require_once ("../conta/clsgccComprobantebinary.php");
     require_once ("../utiles/fnUtiles.php");
     
     try {$blob=null;

@@ -197,9 +197,8 @@ class clstrkEncargo {
                     
                     while ($rowdet = mssql_fetch_array($resultdet, MSSQL_ASSOC)) {
                             $row['fechaprogramada']= $rowdet['fechaprogramada'];
-                            $row['estado']= $rowdet['estado'];
-                            if (strtotime($rowdet['fecha_actual'])>=strtotime($row['fechaentrega'])){                                
-                                if ($rowdet['status_estado']<1){$row['retrazado']= 'RETRASADO';}
+                            if (strtotime($rowdet['fecha_actual'])>=strtotime($row['fechaentrega'])){   
+                                if ($rowdet['status_estado']<1){$row['retrazado']= 'RETRAZADO';}
                             }                            
                     }
                     
