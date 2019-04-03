@@ -30,6 +30,7 @@ class clsprmPlantillaCatalogo {
     private $_gfa_codigo;
     private $_cta_codigo;
     private $_pca_operador;
+    private $_trf_codigo;
     private $_pca_usuario;
 
     function __construct($an_pca_usuario) {
@@ -41,6 +42,7 @@ class clsprmPlantillaCatalogo {
         $this->_gfa_codigo=0;
         $this->_cta_codigo=0;
         $this->_pca_operador=0;
+        $this->_trf_codigo=0;
     }
     
     function set_plt_codigo($_plt_codigo) {
@@ -87,6 +89,10 @@ class clsprmPlantillaCatalogo {
         $this->_pca_operador = $_pca_operador;
     }
 
+    function set_trf_codigo($_trf_codigo) {
+        $this->_trf_codigo = $_trf_codigo;
+    }
+
     public function loadData ( $lstParametros ){
      foreach ( $lstParametros as $key => $value) {
             $method = 'set_' . ucfirst(strtolower( $key ) );
@@ -112,6 +118,7 @@ class clsprmPlantillaCatalogo {
                             :an_gfa_codigo,
                             :an_cta_codigo,
                             :an_pca_operador,
+                            :an_trf_codigo,
                             :an_pca_usuario);
                      end;";
             
@@ -136,6 +143,7 @@ class clsprmPlantillaCatalogo {
            oci_bind_by_name($stid,':an_gfa_codigo',$this->_gfa_codigo,10);
            oci_bind_by_name($stid,':an_cta_codigo',$this->_cta_codigo,10);
            oci_bind_by_name($stid,':an_pca_operador',$this->_pca_operador,10);
+           oci_bind_by_name($stid,':an_trf_codigo',$this->_trf_codigo,10);
            oci_bind_by_name($stid,':an_pca_usuario',$this->_pca_usuario,10);
            
            if(!$luo_set->ReadcrsMant($luo_con, $stid, $crto)){

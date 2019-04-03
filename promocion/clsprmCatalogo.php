@@ -22,13 +22,13 @@ class clsprmCatalogo {
     private $_prd_codigo;
     private $_prc_codigo;
     private $_ctc_codigo;
-    private $_cta_codigo;
+    private $_codsap;
     private $_ctc_usuario;
 
     function __construct($an_ctc_usuario) {
         $this->_ctc_usuario=$an_ctc_usuario;
-        $this->_ctc_codigo=[];
-        $this->_cta_codigo=[];
+        $this->_ctc_codigo=0;
+        $this->_codsap=[];
     }    
     
     function set_prm_codigo($_prm_codigo) {
@@ -47,8 +47,8 @@ class clsprmCatalogo {
         $this->_ctc_codigo = $_ctc_codigo;
     }
 
-    function set_cta_codigo($_cta_codigo) {
-        $this->_cta_codigo = $_cta_codigo;
+    function set_codsap($_codsap) {
+        $this->_codsap = $_codsap;
     }
 
     public function loadData ( $lstParametros ){
@@ -69,7 +69,7 @@ class clsprmCatalogo {
                             :an_prd_codigo,
                             :an_prc_codigo,
                             :an_ctc_codigo,
-                            :an_cta_codigo,
+                            :as_codsap,
                             :an_ctc_usuario);
                     end;";
             
@@ -82,10 +82,10 @@ class clsprmCatalogo {
            };
            
            if ($an_accion==3){
-                $this->_cta_codigo=Array(0,1);               
+                $this->_codsap=Array(0,1);               
            }
             
-           $ln_count = count($this->_pld_codigo);
+           $ln_count = count($this->_codsap);
            
             if ($ln_count<1){return clsViewData::showError(-1,'Array de datos sin elementos');}
             
@@ -94,8 +94,9 @@ class clsprmCatalogo {
            oci_bind_by_name($stid,':an_prm_codigo',$this->_prm_codigo,10);
            oci_bind_by_name($stid,':an_prd_codigo',$this->_prd_codigo,10);
            oci_bind_by_name($stid,':an_prc_codigo',$this->_prc_codigo,10);
-           oci_bind_array_by_name($stid,':an_ctc_codigo',$this->_ctc_codigo,$ln_count,-1,SQLT_INT);
-           oci_bind_array_by_name($stid,':an_cta_codigo',$this->_cta_codigo,$ln_count,-1,SQLT_INT);
+           oci_bind_by_name($stid,':an_ctc_codigo',$this->_ctc_codigo,10);
+           oci_bind_array_by_name($stid,':as_codsap',$this->_codsap,$ln_count,-1,SQLT_CHR);
+           oci_bind_by_name($stid,':an_ctc_usuario',$this->_ctc_usuario,10);
            
            if(!$luo_set->ReadcrsMant($luo_con, $stid, $crto)){
                 return clsViewData::showError($luo_con->getICodeError(),$luo_con->getSMsgError());
@@ -125,4 +126,48 @@ class clsprmCatalogo {
         }
     }
     
+    public function  lst_listar($an_prm_codigo,$as_criterio,$an_start,$an_limit){
+        try{
+            $ln_rowcount=0;
+            
+            $ls_sql="begin
+                        pck_prm_catalogo.sp_lst_listar (:acr_cursor,
+                            :ln_rowcount,
+                            :an_prm_codigo,
+                            :as_criterio,
+                            :an_start,
+                            :an_limit);  
+                    end;";
+            
+            $luo_con = new Db();
+            
+            $luo_set = new clsReference();
+            
+            if(!$luo_set->setcrsLst($luo_con, $ls_sql, $stid, $curs)){
+                return clsViewData::showError($luo_con->getICodeError(),$luo_con->getSMsgError());
+            }
+            
+             oci_bind_by_name($stid,':acr_cursor',$curs,-1,OCI_B_CURSOR)or die(oci_error($luo_con->refConexion));
+             oci_bind_by_name($stid,':ln_rowcount',$ln_rowcount,10);
+             oci_bind_by_name($stid,':an_prm_codigo',$an_prm_codigo,10);
+             oci_bind_by_name($stid,':as_criterio',$as_criterio,60);
+             oci_bind_by_name($stid,':an_start',$an_start,10);
+             oci_bind_by_name($stid,':an_limit',$an_limit,10);
+            
+             if(!$luo_con->ociExecute($stid)){return clsViewData::showError($luo_con->getICodeError(), $luo_con->getSMsgError());}
+             
+             $rowdata= clsViewData::viewData(parsearcursor($curs),false,$ln_rowcount);
+             
+             oci_free_statement($stid);
+             
+             $luo_con->closeConexion();
+             
+             unset($luo_con);
+             
+             return $rowdata;    
+        }
+        catch(Exception $ex){
+            return clsViewData::showError($ex->getCode(), $ex->getMessage());
+        }
+    }
 }

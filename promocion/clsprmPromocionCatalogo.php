@@ -28,11 +28,13 @@ class clsprmPromocionCatalogo {
     private $_sfa_codigo;
     private $_gfa_codigo;
     private $_cta_codigo;
+    private $_trf_codigo;
     private $_prc_usuario;
     
     function __construct($an_prc_usuario) {
         $this->_prc_codigo=0;
         $this->_prc_usuario=$an_prc_usuario;
+        $this->_trf_codigo=0;
     }
     
     function set_prm_codigo($_prm_codigo) {
@@ -74,7 +76,11 @@ class clsprmPromocionCatalogo {
     function set_cta_codigo($_cta_codigo) {
         $this->_cta_codigo = $_cta_codigo;
     }
-
+    
+    function set_trf_codigo($_trf_codigo) {
+        $this->_trf_codigo = $_trf_codigo;
+    }
+    
     public function loadData ( $lstParametros ){
      foreach ( $lstParametros as $key => $value) {
             $method = 'set_' . ucfirst(strtolower( $key ) );
@@ -99,6 +105,7 @@ class clsprmPromocionCatalogo {
                             :an_sfa_codigo,
                             :an_gfa_codigo,
                             :an_cta_codigo,
+                            :an_trf_codigo,
                             :an_prc_usuario);
                         end;";
             
@@ -122,6 +129,7 @@ class clsprmPromocionCatalogo {
            oci_bind_by_name($stid,':an_sfa_codigo',$this->_sfa_codigo,10);
            oci_bind_by_name($stid,':an_gfa_codigo',$this->_gfa_codigo,10);
            oci_bind_by_name($stid,':an_cta_codigo',$this->_cta_codigo,10);
+           oci_bind_by_name($stid,':an_trf_codigo',$this->_trf_codigo,10);
            oci_bind_by_name($stid,':an_prc_usuario',$this->_prc_usuario,10);
             
             if(!$luo_set->ReadcrsMant($luo_con, $stid, $crto)){

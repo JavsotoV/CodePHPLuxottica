@@ -45,7 +45,8 @@ switch ($paramAccion){
                     'sfa_codigo'        => ['filter'        => FILTER_VALIDATE_INT],
                     'gfa_codigo'        => ['filter'        => FILTER_VALIDATE_INT],
                     'cta_codigo'        => ['filter'        => FILTER_VALIDATE_INT],
-                    'pca_operador'      => ['filter'        => FILTER_VALIDATE_INT]
+                    'pca_operador'      => ['filter'        => FILTER_VALIDATE_INT],
+                    'trf_codigo'        => ['filter'        => FILTER_VALIDATE_INT]    
         ];
      
         $parametros = filter_var_array($Variables, $valida);
