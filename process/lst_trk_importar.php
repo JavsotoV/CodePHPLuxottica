@@ -51,8 +51,25 @@ switch ($paramAccion){
             
         break;
     
-    case 2:
-        break;
+    case 2:       
+        
+        if(strlen($Variables['trk_fechai'])>=10)    {$Variables['trk_fechai'] = date('d/m/Y',strtotime($Variables['trk_fechai']));}
+        
+        if(strlen($Variables['trk_fechat'])>=10)    {$Variables['trk_fechat'] = date('d/m/Y',strtotime($Variables['trk_fechat']));}
+
+        $valida = [
+            'trk_fechai'            => [ 'filter' => FILTER_VALIDATE_REGEXP, 'options' => [ 'regexp' => '/^(\d){2}.(\d){2}.(\d){4}$/']],
+            'trk_fechat'            => [ 'filter' => FILTER_VALIDATE_REGEXP, 'options' => [ 'regexp' => '/^(\d){2}.(\d){2}.(\d){4}$/']],
+            'page'                  => ['filter'    => FILTER_VALIDATE_INT],
+            'limit'                 => ['filter'    => FILTER_VALIDATE_INT]];
+        
+            $parametros = filter_var_array($Variables, $valida);
+            
+            $rowdata = $luo_imp->lst_listar($parametros['trk_fechai'],$parametros['trk_fechat'],(($parametros['page'] -1) * $parametros['limit']) , $parametros['limit']);
+            
+            echo $rowdata;
+            
+            break;
 }
 
 unset($luo_imp);

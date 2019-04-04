@@ -45,10 +45,6 @@ class clstrkimportar {
         
     public function sp_trk_importar($an_accion){
         try{
-            $ln_retorno=0;
-            
-            $ls_mensaje='';
-            
             $luo_con = new DbSql();
             
             $ls_sql="sp_trk_impencargoreprogramacion";
@@ -70,15 +66,13 @@ class clstrkimportar {
                 
                 $ln_retorno=0;
                 
-                mssql_bind($stmt,'@ln_retorno',$ln_retorno,SQLINT1,false,false,60);
-                mssql_bind($stmt,'@ls_mensaje',$ls_mensaje,SQLVARCHAR,false,false,300);
                 mssql_bind($stmt,'@as_imd_encargo',$valor,SQLVARCHAR,false,false,60);
                 mssql_bind($stmt,'@as_imd_fecha',$this->_fecha[$ln_fila],SQLVARCHAR,false,false,20);
                 mssql_bind($stmt,'@an_imd_usuario',$this->_imd_usuario,SQLINT1,false,false,10);
          
-                $result=mssql_execute($stmt);
+                $result = $luo_con->sqlsrvExecute($stmt);
                     
-                if (!$result){return clsViewData::showError(-1, 'error ejecutando procedimiento sp_trk_impencargoreprogramacion '.$ln_retorno.'*'.$ln_fila);}    
+                if (!$result){return clsViewData::showError(-1, 'Error ejecutando procedimiento sp_trk_impencargoreprogramacion '.$ln_retorno.'*'.$ln_fila);}    
                 
                 $ln_fila++;
                 
@@ -88,8 +82,6 @@ class clstrkimportar {
             }
             
             $rowdata= clsViewData::viewData( mssqlparsear($result),false);
-            
-            mssql_free_statement($stmt);
             
             $luo_con->closeConexion();
              
@@ -103,8 +95,11 @@ class clstrkimportar {
         
     }
     
-    public function lst_listar($an_periodo){
+    public function lst_listar($ad_fechai,$ad_fechat,$an_start,$an_limit){
         try{
+            
+            $ln_rowcount=0;
+            
             $luo_con = new DbSql();
             
             $ls_sql="sp_trk_lst_importar";
@@ -120,7 +115,11 @@ class clstrkimportar {
                 return clsViewData::showError(-1, 'Error iniciando procedimiento sp_trk_lst_importar');
             }
             
-            $rstpar = mssql_bind($stmt,'@an_trk_periodo',$as_nro_encargo,SQLINT1,false,false,10);
+            mssql_bind($stmt,'@ad_fechai',$ad_fechai,SQLVARCHAR,false,false,12);
+            mssql_bind($stmt,'@ad_fechat',$ad_fechat,SQLVARCHAR,false,false,12);
+            mssql_bind($stmt,'@an_start',$an_start,SQLINT1,false,false,10);
+            mssql_bind($stmt,'@an_limit',$an_limit,SQLINT1,false,false,10);
+            mssql_bind($stmt,'RETVAL',$ln_rowcount,SQLINT1,true,false,10);
          
             $result = $luo_con->sqlsrvExecute($stmt);
             
