@@ -90,7 +90,8 @@ switch ($paramAccion){
      /*---listado de rendiciones para su verificacion por contabilidad --------------*/
     case 4:
           $valida = [
-              'ren_periodo'     => ['filter'    => FILTER_VALIDATE_INT],
+              'pai_codigo'      => ['filter'    => FILTER_VALIDATE_INT],
+              'ren_periodo'     => ['filter'    => FILTER_VALIDATE_INT],              
               'ren_estado'      => ['filter'    => FILTER_VALIDATE_INT],
               'criterio'        => ['filter'    => FILTER_UNSAFE_RAW],
               'page'            => ['filter'    => FILTER_VALIDATE_INT],
@@ -99,7 +100,7 @@ switch ($paramAccion){
         
           $parametros = filter_var_array($Variables,$valida);
           
-          $rowdata = $luo_rend->lst_conta($parametros['ren_periodo'], $parametros['ren_estado'], $parametros['criterio'], (($parametros['page'] -1) * $parametros['limit']) , $parametros['limit']);
+          $rowdata = $luo_rend->lst_conta($parametros['pai_codigo'], $parametros['ren_periodo'], $parametros['ren_estado'], $parametros['criterio'], (($parametros['page'] -1) * $parametros['limit']) , $parametros['limit']);
           
           echo $rowdata;
           

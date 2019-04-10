@@ -75,6 +75,7 @@ switch ($paramAccion){
         
         break;
     
+    //---------lista de cajas por responsable -----------------------------------
     case 3:
         $valida = [
             'prc_codigo'    => ['filter'    => FILTER_VALIDATE_INT],
@@ -86,6 +87,24 @@ switch ($paramAccion){
         $parametros= filter_var_array($Variables,$valida);
         
         $rowdata = $luo_ent->lst_entidadxresponsable($parametros['prc_codigo'], $user_codigo, $parametros['criterio'], (($parametros['page'] -1) * $parametros['limit']) , $parametros['limit']);
+        
+        echo $rowdata;
+        
+        break;
+    
+    //--------lista de cajas por jefes zonales ---------------------------------
+    case 4:
+        $valida = [
+            'prc_codigo'    => ['filter'    => FILTER_VALIDATE_INT],
+            'pai_codigo'    => ['filter'    => FILTER_VALIDATE_INT],          
+            'criterio'      => ['filter'    => FILTER_UNSAFE_RAW],
+            'page'          => ['filter'    => FILTER_VALIDATE_INT],
+            'limit'         => ['filter'    => FILTER_VALIDATE_INT]
+        ];
+        
+        $parametros= filter_var_array($Variables,$valida);
+        
+        $rowdata = $luo_ent->lst_entidadxjefezonal($parametros['prc_codigo'],$parametros['pai_codigo'], $user_codigo, $parametros['criterio'], (($parametros['page'] -1) * $parametros['limit']) , $parametros['limit']);
         
         echo $rowdata;
         

@@ -204,13 +204,14 @@ class clsgccRendicion {
         }        
     }
     
-    public function lst_conta($an_ren_periodo,$an_ren_estado,$as_criterio,$an_start,$an_limit){
+    public function lst_conta($an_pai_codigo,$an_ren_periodo,$an_ren_estado,$as_criterio,$an_start,$an_limit){
         try{
             $ln_rowcount=0;
             
             $ls_sql="begin
                         pck_gcc_rendicion.sp_lst_conta(:acr_cursor,
                             :ln_rowcount,
+                            :an_pai_codigo,
                             :an_ren_periodo,
                             :an_ren_estado,
                             :as_criterio,
@@ -228,6 +229,7 @@ class clsgccRendicion {
             
              oci_bind_by_name($stid,':acr_cursor',$curs,-1,OCI_B_CURSOR)or die(oci_error($luo_con->refConexion));
              oci_bind_by_name($stid,':ln_rowcount',$ln_rowcount,10);
+             oci_bind_by_name($stid,':an_pai_codigo',$an_pai_codigo,10);
              oci_bind_by_name($stid,':an_ren_periodo',$an_ren_periodo,10);
              oci_bind_by_name($stid,':an_ren_estado',$an_ren_estado,10);
              oci_bind_by_name($stid,':as_criterio',$as_criterio,60);

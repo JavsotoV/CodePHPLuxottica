@@ -102,14 +102,14 @@ class clsgccIncidencia {
             $luo_con->closeConexion();
             
             // --- enviar email ------
-            if ($this->_red_codigo==0){
+          /*  if ($this->_red_codigo==0){
                
                 $luo_email = new clsgccEnviarEmail($rowdata);
                 
                 $luo_email->RendicionNotificacion();
                 
                 unset($luo_email);
-            }
+            }*/
             
             unset($luo_con);
             
