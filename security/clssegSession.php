@@ -19,6 +19,7 @@ class clssegSession {
     private $_rol_codigo;
     private $_IPaddress;
     private $_cta_nombre;
+    private $_data;
     
     public function get_per_codigo() {
         
@@ -44,11 +45,20 @@ class clssegSession {
         
         return $this->_cta_nombre;
     }
+    
+    public function get_data(){
+        
+        $this->_data =$_SESSION['data'];
+        
+        return $this->_data;
+    }
 
         
     public  function lst_iniciar($rowdata){
         
         $rowsession = json_decode($rowdata, true);
+        
+        $_SESSION['data']=$rowdata;
        
       if ($rowsession['data']['0']['ln_retorno']==='1'){ 
         $_SESSION['per_codigo']         = $rowsession['data']['0']['per_codigo'];

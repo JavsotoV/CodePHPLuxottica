@@ -38,7 +38,8 @@ switch ($paramAccion){
     case 1:
         $valida =[
             'encargo'           => ['filter'        => FILTER_UNSAFE_RAW,'flags' => FILTER_REQUIRE_ARRAY],
-            'fecha'             => ['filter'        => FILTER_UNSAFE_RAW,'flags' => FILTER_REQUIRE_ARRAY]
+            'fecha'             => ['filter'        => FILTER_UNSAFE_RAW,'flags' => FILTER_REQUIRE_ARRAY],
+            'motivo'            => ['filter'        => FILTER_UNSAFE_RAW,'flags' => FILTER_REQUIRE_ARRAY]
         ]; 
         
         $parametros = filter_var_array($Variables, $valida);

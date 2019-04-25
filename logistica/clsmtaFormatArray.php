@@ -63,11 +63,10 @@ class clsmtaFormatArray {
              'trf_cdg'              => 'TARIFA',
              'cdg'                  => 'COD. ART',           
              'codsap'               => 'COD. SAP',
-             'descripcion'          => 'DESCRIPCION',
              'trd_precio'           => 'PRECIO',
              'trd_precioiva'        => 'PRECIO IVA');
          
-         $lstArrayHeaderWith=Array(15,20,20,80,20,20);
+         $lstArrayHeaderWith=Array(15,20,20,20,20);
          
              $lstArrayFormat=Array('cdg'             => '@',
                                    'codsap'          => '@',

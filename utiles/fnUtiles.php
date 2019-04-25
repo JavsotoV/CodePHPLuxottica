@@ -346,7 +346,7 @@ function fn_returnStringFormatHTML($Cadena, $ConvertComillas=false) {
 }
 
 
-function fn_enviaremail($lstr_correo,$as_titulo=null, $as_mensaje=null, $as_from=null,$as_fromname=null){
+function fn_enviaremail($lstr_correo,$as_titulo=null, $as_mensaje=null, $as_from=null,$as_fromname=null,$as_filenameruta=null,$as_filenametemp=null){
 			
 				$mail= new PHPMailer();
 				$mail->IsSMTP();
@@ -364,6 +364,21 @@ function fn_enviaremail($lstr_correo,$as_titulo=null, $as_mensaje=null, $as_from
 				foreach($lstr_correo as $a => $c){
 					$mail->AddAddress($c,$a);
 				}
+                                
+                                if(!empty($as_filenameruta)){
+                                    foreach($as_filenameruta as $archivo){
+                                        $mail->AddAttachment($archivo); 
+                                    }
+                                }
+
+                                if(!empty($as_filenametemp)){
+                                    foreach($as_filenametemp as $nombrearchivo=>$contenidoArchivo){
+                                        $mail->AddStringAttachment($contenidoArchivo,$nombrearchivo,'base64');
+                                    }
+                                }
+                                
+                                $mail->Timeout = 20;
+                                
 				if($mail->Send()){
 					$lb_retorno=true;
 
@@ -436,4 +451,41 @@ function fn_validaremail($as_email){
                     "xls"=>"application/excel", 
                     "txt"=>"application/plain",
                     "ppt"=>"application/vnd.ms-powerpoint");
+ }
+ 
+ function fn_obtenernumerodias($fechainicial,$fechafinal,&$diferencia=0){
+     
+    if (strpos($fechainicial, "/")>0){
+            $valoresPrimera = explode ("/", $fechainicial);               
+        }else
+        {
+            $valoresPrimera = explode ("-", $fechainicial);   
+        }
+
+    if (strpos($fechafinal, "/")>0){
+            $valoresSegunda = explode ("/", $fechafinal);     
+        }else
+        {
+            $valoresSegunda = explode ("-", $fechafinal);     
+        } 
+        
+    $diaPrimera    = $valoresPrimera[0];  
+    $mesPrimera    = $valoresPrimera[1];  
+    $anyoPrimera   = $valoresPrimera[2]; 
+
+    $diaSegunda    = $valoresSegunda[0];  
+    $mesSegunda    = $valoresSegunda[1];  
+    $anyoSegunda   = $valoresSegunda[2];
+
+    $diasPrimeraJuliano = gregoriantojd($mesPrimera, $diaPrimera, $anyoPrimera);  
+    $diasSegundaJuliano = gregoriantojd($mesSegunda, $diaSegunda, $anyoSegunda);     
+
+    if(!checkdate($mesPrimera, $diaPrimera, $anyoPrimera)){
+        return 0;
+  }elseif(!checkdate($mesSegunda, $diaSegunda, $anyoSegunda)){
+        return 0;
+  }else{
+        $diferencia = $diasPrimeraJuliano - $diasSegundaJuliano;
+        return  1;
+  } 
  }

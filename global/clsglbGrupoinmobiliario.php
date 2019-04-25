@@ -75,7 +75,6 @@ class clsglbGrupoinmobiliario {
             
             oci_bind_by_name($stid,':an_accion',$an_accion,10);
             oci_bind_by_name($stid,':acr_retorno',$crto,-1,OCI_B_CURSOR);
-            oci_bind_by_name($stid,':acr_cursor',$curs,-1,OCI_B_CURSOR);
             oci_bind_by_name($stid,':an_imb_codigo',$this->_imb_codigo,10);
             oci_bind_by_name($stid,':an_pai_codigo',$this->_pai_codigo,10);
             oci_bind_by_name($stid,':as_imb_descripcion',$this->_imb_descripcion,120);
@@ -88,7 +87,7 @@ class clsglbGrupoinmobiliario {
             
             $luo_con->commitTransaction();
             
-            $lstData = ( $an_accion != 3 ? parsearcursor($curs) : [] );
+            $lstData =[];
                 
             $rowdata = clsViewData::viewData($lstData, false, 1, $luo_con->getMsgRetorno());
                  
@@ -105,14 +104,13 @@ class clsglbGrupoinmobiliario {
         }
     }
     
-   public function lst_lista($an_imb_codigo,$an_pai_codigo,$as_criterio,$an_start,$an_limit){
+   public function lst_lista($an_pai_codigo,$as_criterio,$an_start,$an_limit){
         try{
             $ln_rowcount=0;
             
             $ls_sql="begin
-                        pck_glb_grupoinmobiliaria.sp_lst_lista (:acr_cursor,
+                        pck_glb_grupoinmobiliaria.sp_lst_lista(:acr_cursor,
                             :ln_rowcount,
-                            :an_imb_codigo,
                             :an_pai_codigo,                            
                             :as_criterio,
                             :an_start,
@@ -131,7 +129,6 @@ class clsglbGrupoinmobiliario {
            
              oci_bind_by_name($stid,':acr_cursor',$curs,-1,OCI_B_CURSOR)or die(oci_error($luo_con->refConexion));
              oci_bind_by_name($stid,':ln_rowcount',$ln_rowcount,10);
-             oci_bind_by_name($stid,':an_imb_codigo',$an_imb_codigo,10);
              oci_bind_by_name($stid,':an_pai_codigo',$an_pai_codigo,10);
              oci_bind_by_name($stid,':as_criterio',$as_criterio,60);
              oci_bind_by_name($stid,':an_start',$an_start,10);

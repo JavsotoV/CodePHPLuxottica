@@ -15,6 +15,7 @@
 require_once("../Base/DbSql.php");
 require_once("../Base/fncscript.php");
 require_once("../Base/clsViewData.php");
+require_once("../utiles/fnUtiles.php");
 
 class clstrkEncargo {
     
@@ -153,6 +154,8 @@ class clstrkEncargo {
             $luo_con = new DbSql();
             
             $lstArray=array();
+            
+            $ln_diferencia=0;
              
             $ls_sql="sp_trk_lst_encargoxcliente";
             
@@ -196,10 +199,17 @@ class clstrkEncargo {
                     }
                     
                     while ($rowdet = mssql_fetch_array($resultdet, MSSQL_ASSOC)) {
-                            $row['fechaprogramada']= $rowdet['fechaprogramada'];
-                            if (strtotime($rowdet['fecha_actual'])>=strtotime($row['fechaentrega'])){   
-                                if ($rowdet['status_estado']<1){$row['retrazado']= 'RETRAZADO';}
-                            }                            
+                            
+                            $row['fechaprogramada']= $rowdet['fechaprogramada'];                            
+                            
+                            if ($rowdet['status_estado']<1){
+                                
+                               if (fn_obtenernumerodias($row['fechaentrega'],$rowdet['fecha_actual'], $ln_diferencia)>0){
+                                // if (strtotime($rowdet['fecha_actual'])>=strtotime($row['fechaentrega'])){   
+                                   if ($ln_diferencia<0) {$row['retrazado']= 'RETRAZADO';}
+                                // }                            
+                               }
+                            }
                     }
                     
                     $lstArray[] = $row;

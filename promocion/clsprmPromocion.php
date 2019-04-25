@@ -26,6 +26,7 @@ class clsprmPromocion {
     private $_pai_codigo;
     private $_prm_fechai;
     private $_prm_fechat;
+    private $_prm_confirmar;
     private $_prm_usuario;
     private $_prd_codigo;
     private $_pld_codigo;
@@ -35,7 +36,8 @@ class clsprmPromocion {
     private $_prd_estado;
     
     function __construct($an_prm_usuario) {
-        $this->_prm_codigo=0;        
+        $this->_prm_codigo=0;
+        $this->_prm_confirmar=0;    
         $this->_prm_usuario=$an_prm_usuario;
         $this->_prd_codigo=[];
         $this->_pld_codigo=[];
@@ -69,6 +71,10 @@ class clsprmPromocion {
         $this->_prm_fechat = validaNull($_prm_fechat, '01/01/1900', 'date');
     }
 
+    function set_prm_confirmar($_prm_confirmar) {
+        $this->_prm_confirmar = $_prm_confirmar;
+    }
+        
     function set_prd_codigo($_prd_codigo) {
         $this->_prd_codigo = $_prd_codigo;
     }
@@ -113,6 +119,7 @@ class clsprmPromocion {
                         :an_pai_codigo,
                         to_date(:ad_prm_fechai,'dd/mm/yyyy'),
                         to_date(:ad_prm_fechat,'dd/mm/yyyy'),
+                        :an_prm_confirmar,
                         :an_pld_codigo,
                         :an_prd_codigo,
                         :an_prd_valor,
@@ -151,6 +158,7 @@ class clsprmPromocion {
            oci_bind_by_name($stid,':an_pai_codigo',$this->_pai_codigo,10);
            oci_bind_by_name($stid,':ad_prm_fechai',$this->_prm_fechai,12);
            oci_bind_by_name($stid,':ad_prm_fechat',$this->_prm_fechat,12);
+           oci_bind_by_name($stid,':an_prm_confirmar',$this->_prm_confirmar,10);
            oci_bind_array_by_name($stid,':an_pld_codigo',$this->_pld_codigo,$ln_count,-1,SQLT_INT);
            oci_bind_array_by_name($stid,':an_prd_codigo',$this->_prd_codigo,$ln_count,-1,SQLT_INT);
            oci_bind_array_by_name($stid,':an_prd_valor',$this->_prd_valor,$ln_count,-1,SQLT_FLT);

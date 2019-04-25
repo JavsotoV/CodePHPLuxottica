@@ -45,7 +45,7 @@ $fil=0;
 $col=0;
 $filadata=3;
 
-$lst_campos = array('encargo','fecha');
+$lst_campos = array('encargo','fecha','motivo');
 
 $ln_rowcount=0;
 
@@ -78,7 +78,8 @@ foreach ($objWorksheet->getRowIterator() as $row) {
         }
     
             array_push ( $rowdata, [ $lst_campos[0]=>$data[0],
-                                             $lst_campos[1]=>$data[1]]);}
+                                     $lst_campos[1]=>$data[1],
+                                     $lst_campos[2]=>$data[2]]);}
  }
  
 echo json_encode(['success'=>true,'proceso'=>true,'data'=>$rowdata,'total'=>$ln_rowcount]);

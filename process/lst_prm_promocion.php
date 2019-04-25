@@ -43,6 +43,7 @@ switch ($paramAccion){
             'pai_codigo'        => ['filter'        => FILTER_VALIDATE_INT],
             'prm_fechai'        => ['filter'        => FILTER_VALIDATE_REGEXP, 'options' => [ 'regexp' => '/^(\d){2}.(\d){2}.(\d){4}$/']],
             'prm_fechat'        => ['filter'        => FILTER_VALIDATE_REGEXP, 'options' => [ 'regexp' => '/^(\d){2}.(\d){2}.(\d){4}$/']],
+            'prm_confirmar'     => ['filter'        => FILTER_VALIDATE_INT],
             'pld_codigo'        => ['filter'        => FILTER_VALIDATE_INT, 'flags' => FILTER_REQUIRE_ARRAY],
             'prd_codigo'        => ['filter'        => FILTER_VALIDATE_INT, 'flags' => FILTER_REQUIRE_ARRAY],
             'prd_valor'         => ['filter'        => FILTER_VALIDATE_FLOAT, 'flags' => FILTER_REQUIRE_ARRAY],

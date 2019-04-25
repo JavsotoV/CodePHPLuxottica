@@ -131,14 +131,14 @@ class clsgcaGasto {
             
             $luo_con->closeConexion();
             
-            if ($an_accion==2){
+           /* if ($an_accion==2){
                 
                 $luo_email = new clsgcaEnviarEmail($rowdata);
                 
                 $luo_email->EditContrato();  
                 
                 unset($luo_email);
-            }
+            }*/
             
             unset($luo_con);
                    

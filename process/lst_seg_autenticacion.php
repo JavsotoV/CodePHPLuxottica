@@ -63,6 +63,14 @@ switch($paramAccion){
     
         break;
     
+    //-----------datos de sesion de usuario-----------------
+    case 3:
+        
+        $rowdata = $luo_session->get_data();
+        
+        echo $rowdata;
+        
+        break;        
 } 
 
 unset($luo_autenticacion);

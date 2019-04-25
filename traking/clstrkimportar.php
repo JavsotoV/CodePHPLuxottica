@@ -18,12 +18,14 @@ require_once("../Base/clsViewData.php");
 class clstrkimportar {
     private $_encargo;
     private $_fecha;
+    private $_motivo;
     private $_imd_usuario;
     
     function __construct($an_imd_usuario) {
         $this->_imd_usuario=$an_imd_usuario;
         $this->_encargo=[];
         $this->_fecha=[];
+        $this->_motivo=[];
     }
     
     function set_encargo($_encargo) {
@@ -34,7 +36,11 @@ class clstrkimportar {
         $this->_fecha = $_fecha;
     }
 
-    public function loadData ( $lstParametros ){
+    function set_motivo($_motivo) {
+        $this->_motivo = $_motivo;
+    }
+
+        public function loadData ( $lstParametros ){
       foreach ( $lstParametros as $key => $value) {
             $method = 'set_' . ucfirst(strtolower( $key ) );
             if ( method_exists( $this, $method ) ){
@@ -68,6 +74,7 @@ class clstrkimportar {
                 
                 mssql_bind($stmt,'@as_imd_encargo',$valor,SQLVARCHAR,false,false,60);
                 mssql_bind($stmt,'@as_imd_fecha',$this->_fecha[$ln_fila],SQLVARCHAR,false,false,20);
+                mssql_bind($stmt,'@as_imd_motivo',$this->_motivo[$ln_fila],SQLVARCHAR,false,false,120);
                 mssql_bind($stmt,'@an_imd_usuario',$this->_imd_usuario,SQLINT1,false,false,10);
          
                 $result = $luo_con->sqlsrvExecute($stmt);
