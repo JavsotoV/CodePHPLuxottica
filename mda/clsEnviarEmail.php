@@ -66,7 +66,7 @@ class clsEnviarEmail {
                 if ($this->_rowdata['data']['0']['flag_reasignado']=='S') {$ls_titulo='Ticket Reaignado Nro.';}
                  
                 $ls_titulo .= $this->_rowdata['data']['0']['tck_numero'].' - '.$this->_rowdata['data']['0']['tck_titulo'];
-                
+           
                 $lb_retorno=fn_enviaremail($lstr_correo, $ls_titulo, $ls_mensaje, $ls_from, $ls_fromname);
                 
                 }                              

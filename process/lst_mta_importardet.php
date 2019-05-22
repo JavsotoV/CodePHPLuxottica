@@ -5,7 +5,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require_once ("../logistica/clsmtaImportar.php");
+require_once ("../logistica/clsmtaImportardet.php");
 require_once ('../security/clssegSession.php');
 require_once('../Base/clsViewData.php');
 
@@ -29,18 +29,14 @@ if (!isset($user_codigo)){
 
 $paramAccion = $Variables ['operacion'];
 
-$luo_importar = new clsmtaImportar($user_codigo);
-
+$luo_impdet = new clsmtaImportardet();
 
 switch ($paramAccion){
     case 1:
-            $valida = [
+        $valida = [
                 'accion'            => ['filter'        => FILTER_VALIDATE_INT],
                 'imp_codigo'        => ['filter'        => FILTER_VALIDATE_INT],
-                'pai_codigo'        => ['filter'        => FILTER_VALIDATE_INT],
-                'tipfamcod'         => ['filter'        => FILTER_UNSAFE_RAW],
-                'imp_origen'        => ['filter'        => FILTER_VALIDATE_INT],
-                'imp_observacion'   => ['filter'        => FILTER_UNSAFE_RAW],
+                'imd_codigo'        => ['filter'        => FILTER_VALIDATE_INT],
                 'cdg'               => ['filter'        => FILTER_UNSAFE_RAW],
                 'codigobarras'      => ['filter'        => FILTER_UNSAFE_RAW],
                 'codsap'            => ['filter'        => FILTER_UNSAFE_RAW],
@@ -75,7 +71,7 @@ switch ($paramAccion){
                 'marca'             => ['filter'        => FILTER_UNSAFE_RAW],
                 'zonaop'            => ['filter'        => FILTER_VALIDATE_FLOAT],      
                 'eje'               => ['filter'        => FILTER_VALIDATE_FLOAT],  
-                'radio'             => ['filter'        => FILTER_VALIDATE_FLOAT],
+                'radi'              => ['filter'        => FILTER_VALIDATE_FLOAT],
                 'diametro'          => ['filter'        => FILTER_VALIDATE_FLOAT],
                 'cilindro'          => ['filter'        => FILTER_VALIDATE_FLOAT],
                 'esfera'            => ['filter'        => FILTER_VALIDATE_FLOAT],
@@ -84,63 +80,34 @@ switch ($paramAccion){
                 'cristal'           => ['filter'        => FILTER_VALIDATE_FLOAT],
                 'aplica'            => ['filter'        => FILTER_VALIDATE_FLOAT],
                 'tarifa'            => ['filter'        => FILTER_UNSAFE_RAW],
-                'precioiva'         => ['filter'        => FILTER_VALIDATE_FLOAT]
-                ];
+                'precioiva'         => ['filter'        => FILTER_VALIDATE_FLOAT]];
         
-            $parametros = filter_var_array($Variables, $valida);
-   
-            $luo_importar->loadData($parametros);
-            
-            $rowdata = $luo_importar->sp_mta_importar($parametros['accion']);
-               
-            echo $rowdata;
-            
-            break;
+        $parametros = filter_var_array($Variables,$valida);
         
+        $luo_impdet->loadData($parametros);
+        
+        $rowdata = $luo_impdet->sp_mta_registrodet($parametros['accion']);
+        
+        echo $rowdata;
+        
+        break;
+    
     case 2:
-            $valida = [
-                'imp_periodo'           => ['filter'    => FILTER_VALIDATE_INT],
-                'imp_estado'            => ['filter'    => FILTER_VALIDATE_INT],
-                'criterio'              => ['filter'    => FILTER_UNSAFE_RAW],
-                'page'                  => ['filter'    => FILTER_VALIDATE_INT],
-                'limit'                 => ['filter'    => FILTER_VALIDATE_INT]
-            ];
+        $valida = [
+            'imp_codigo'            => ['filter'        => FILTER_VALIDATE_INT],
+            'criterio'              => ['filter'        => FILTER_UNSAFE_RAW],
+            'page'                  => ['filter'        => FILTER_VALIDATE_INT],
+            'limit'                 => ['filter'        => FILTER_VALIDATE_INT]
+        ];
         
-            $parametros = filter_var_array($Variables, $valida);
-            
-            $rowdata = $luo_importar->lst_listar($parametros['imp_periodo'],$parametros['imp_estado'], $parametros['criterio'],(($parametros['page'] -1) * $parametros['limit']) , $parametros['limit']);
-            
-            echo $rowdata;
-            
-            break;     
+        $parametros = filter_var_array($Variables, $valida);
         
-    case 3:
-           $valida = [
-               'accion'          => ['filter'        => FILTER_VALIDATE_INT],
-               'imp_codigo'      => ['filter'        => FILTER_VALIDATE_INT]];
+        $rowdata = $luo_impdet->lst_listar($parametros['imp_codigo'],$parametros['criterio'], (($parametros['page'] -1) * $parametros['limit']) , $parametros['limit']);
         
-            $parametros = filter_var_array($Variables, $valida);
-     
-            $rowdata = $luo_importar->lst_replicar($parametros['accion'],$parametros['imp_codigo']);
-            
-            echo $rowdata;
-            
-            break;
+        echo $rowdata;
         
-    case 4:
-            $valida =[
-                'accion'         => ['filter'       => FILTER_VALIDATE_INT],    
-                'imp_codigo'     => ['filter'       => FILTER_VALIDATE_INT]
-            ];
-        
-            $parametros = filter_var_array($Variables,$valida);
-            
-            $rowdata = $luo_importar->sp_mta_procesar($parametros['accion'],$parametros['imp_codigo']);
-            
-            echo $rowdata;
-            
-            break;
+        break;
 }
 
-unset($luo_importar);
-unset($luo_segsesion);
+unset($luo_impdet);
+unset($luo_segsession);

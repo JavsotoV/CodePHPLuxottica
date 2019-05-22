@@ -37,6 +37,7 @@ switch ($paramAccion){
         $Variables['ivacb']                 = str_replace(",",".",$Variables['ivacb']);
         $Variables['priprov']               = str_replace(",",".",$Variables['priprov']);
         $Variables['stock_minimo']          = str_replace(",",".",$Variables['stock_minimo']);
+        $Variables['cri_ref']               = str_replace(",",".",$Variables['cri_ref']);
         $Variables['cri_diametroini']       = str_replace(",",".",$Variables['cri_diametroini']);
         $Variables['cri_diametrofin']       = str_replace(",",".",$Variables['cri_diametrofin']);
         $Variables['cri_cilindroini']       = str_replace(",",".",$Variables['cri_cilindroini']);
@@ -85,6 +86,7 @@ switch ($paramAccion){
                 'stock_minimo'      => ['filter'        => FILTER_VALIDATE_FLOAT],
                 'liquidacion'       => ['filter'        => FILTER_UNSAFE_RAW],
                 'etiquetar'         => ['filter'        => FILTER_UNSAFE_RAW],
+                'cri_ref'           => ['filter'        => FILTER_VALIDATE_FLOAT],
                 'col_codigo'        => ['filter'        => FILTER_VALIDATE_INT],
                 'cri_diametroini'   => ['filter'        => FILTER_VALIDATE_FLOAT],
                 'cri_diametrofin'   => ['filter'        => FILTER_VALIDATE_FLOAT],    

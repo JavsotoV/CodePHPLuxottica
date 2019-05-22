@@ -8,9 +8,9 @@ Ext.application({
     appFolder: '../../../../luxottica/app/luxottica',
     appProperty: 'luxottica',
     controllers: [
-        'gmo.global.glbconfig.ctrMain',
-        'gmo.global.glbconfig.ctrMto',
-        'gmo.global.glbubigeo.ctrlstubigeo'
+      'gmo.global.glbconfig.ctrMain',
+      'gmo.global.glbconfig.ctrMtto',
+      'gmo.global.glbubigeo.ctrlstubigeo'
     ],
     name: 'luxottica',
         

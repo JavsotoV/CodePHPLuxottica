@@ -83,7 +83,7 @@ class clstrkimportardet {
     }
     
     
-    public function lst_listar($an_imp_codigo,$as_criterio,$an_start,$an_limit){
+    public function lst_listar($an_imp_codigo,$an_pai_codigo,$as_criterio,$an_start,$an_limit){
         try{
              $ln_rowcount=0;
              
@@ -107,6 +107,7 @@ class clstrkimportardet {
             }
             
             mssql_bind($stmt,'@an_imp_codigo',$an_imp_codigo,SQLINT1,false,false,10);
+            mssql_bind($stmt,'@an_pai_codigo',$an_pai_codigo,SQLINT1,false,false,10);
             mssql_bind($stmt,'@as_criterio',$as_criterio,SQLVARCHAR,false,false,60);
             mssql_bind($stmt,'@an_start',$an_start,SQLINT1,false,false,10);
             mssql_bind($stmt,'@an_limit',$an_limit,SQLINT1,false,false,10);            

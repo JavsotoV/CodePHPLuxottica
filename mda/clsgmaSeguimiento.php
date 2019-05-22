@@ -189,14 +189,14 @@ class clsgmaSeguimiento {
              
             unset($luo_con);
             
-            if ($an_accion!=3){
+      /*      if ($an_accion!=3){
                 
                 $luo_email = new clsEnviarEmail($rowdata);
                 
                 $lb_retorno=$luo_email->Newticket();
                 
                 unset($luo_email);
-            }
+            }*/
            
             return $rowdata; 
         }

@@ -68,6 +68,7 @@ class clssegSession {
         $_SESSION['pai_codigo']         = $rowsession['data']['0']['pai_codigo'];
         $_SESSION['pai_denominacion']   = $rowsession['data']['0']['pai_denominacion'];
         $_SESSION['rol_codigo']         = $rowsession['data']['0']['rol_codigo'];
+        $_SESSION['dom_resumen']        = $rowsession['data']['0']['dom_resumen'];
         $_SESSION['userAgent']          = $_SERVER['HTTP_USER_AGENT'];
         $_SESSION['SKey']               = uniqid(mt_rand(), true);
         $_SESSION['IPaddress']          = fn_GetIp();

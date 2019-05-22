@@ -7,25 +7,19 @@
  */
 
 /**
- * Description of clsmtaImportar
+ * Description of clsmtaImportardet
  *
  * @author JAVSOTO
  */
-
 require_once("../Base/Db.php");
 require_once("../Base/fncscript.php");
 require_once("../Base/clsViewData.php");
 require_once("../Base/clsReference.php");
 
-
-class clsmtaImportar {
+class clsmtaImportardet {
     //put your code here
     private $_imp_codigo;
-    private $_pai_codigo;
-    private $_tipfamcod;
-    private $_imp_origen;
-    private $_imp_observacion;
-    private $_imp_usuario;    
+    private $_imd_codigo;        
     private $_cdg;
     private $_codigobarras;
     private $_codsap;
@@ -70,10 +64,9 @@ class clsmtaImportar {
     private $_aplica;
     private $_tarifa;
     private $_precioiva;
-    private $iuo_con;
+    private $_imp_usuario;
     
     function __construct($an_imp_usuario) {
-        $this->_imp_codigo=0;
         $this->_imp_usuario=$an_imp_usuario;   
         $this->_indref=0;
         $this->_desdediametro=0;
@@ -98,29 +91,16 @@ class clsmtaImportar {
         $this->_esfera=0;
         $this->_esferah=0;
         $this->_precioiva=0;
-        $this->_diametro=0;
     }
     
     function set_imp_codigo($_imp_codigo) {
         $this->_imp_codigo = $_imp_codigo;
     }
 
-    function set_pai_codigo($_pai_codigo) {
-        $this->_pai_codigo = $_pai_codigo;
+    function set_imd_codigo($_imd_codigo) {
+        $this->_imd_codigo = $_imd_codigo;
     }
 
-    function set_tipfamcod($_tipfamcod) {
-        $this->_tipfamcod = validaNull($_tipfamcod, '0', 'string');
-    }
-
-    function set_imp_origen($_imp_origen) {
-        $this->_imp_origen = $_imp_origen;
-    }
-
-    function set_imp_observacion($_imp_observacion) {
-        $this->_imp_observacion = mb_strtoupper($_imp_observacion);
-    }
-  
     function set_cdg($_cdg) {
         $this->_cdg = $_cdg;
     }
@@ -296,9 +276,8 @@ class clsmtaImportar {
     function set_precioiva($_precioiva) {
         $this->_precioiva = number_format(validaNull($_precioiva, 0, 'float'),2);
     }
-
-        
-    public function loadData ( $lstParametros ){
+    
+     public function loadData ( $lstParametros ){
         foreach ( $lstParametros as $key => $value) {
             $method = 'set_' . ucfirst(strtolower( $key ) );
             if ( method_exists( $this, $method ) ){
@@ -307,31 +286,13 @@ class clsmtaImportar {
         }
     }
     
-    public function of_conectar(){
-        
-        $this->iuo_con= new  Db();
-        
-        return $this->iuo_con;
-    }
-    
-    public function of_desconectar(){
-        
-        $this->iuo_con->closeConexion();
-        
-        unset($this->iuo_con);
-    }
-        
-    
-    public function sp_mta_importar($an_accion){
+    public function sp_mta_registrodet($an_accion){
         try{
-            $ls_sql="begin
-                 pck_mta_importar.sp_mta_importar(:an_accion,
+             $ls_sql="begin
+                 pck_mta_importar.sp_mta_importardet(:an_accion,
                     :acr_retorno,
                     :an_imp_codigo,
-                    :an_pai_codigo,
-                    :as_tipfamcod,
-                    :an_imp_origen,
-                    :as_imp_observacion,
+                    :an_imd_codigo,
                     :as_cdg,
                     :as_codigobarras,
                     :as_codsap,
@@ -365,7 +326,7 @@ class clsmtaImportar {
                     :as_marca,
                     to_number(:an_zonaop,'999.999'),
                     to_number(:an_eje,'999.999'),
-                    to_number(:an_radio,'999.9999'),
+                    to_number(:an_radio,'999,9999'),
                     to_number(:an_diametro,'999.999'),
                     to_number(:an_cilindro,'999.999'),
                     to_number(:an_esfera,'999.9999'),
@@ -374,28 +335,21 @@ class clsmtaImportar {
                     :as_cristal,
                     :as_aplica,
                     :as_tarifa,
-                    to_number(:an_precioiva,'999,999,999.999999'),
-                    :an_imp_usuario);
+                    to_number(:an_precioiva,'999,999,999.999999'));
                 end;";
             
-            if ($an_accion!='1'){
-                
-                $this->of_conectar();
-            }
+             $luo_con = new Db();
             
-            $luo_set = new clsReference();
+             $luo_set = new clsReference();
             
-            if(!$luo_set->setcrsMant($this->iuo_con, $ls_sql, $stid, $crto, $curs)){
-                return clsViewData::showError($this->iuo_con->getICodeError(),$this->iuo_con->getSMsgError());
+            if(!$luo_set->setcrsMant($luo_con, $ls_sql, $stid, $crto, $curs)){
+                return clsViewData::showError($luo_con->getICodeError(),$luo_con->getSMsgError());
             };
             
-            oci_bind_by_name($stid,':an_accion',$an_accion,10) or die(oci_error($this->iuo_con->refConexion));
-            oci_bind_by_name($stid,':acr_retorno',$crto,-1,OCI_B_CURSOR) or die(oci_error($this->iuo_con->refConexion));
+            oci_bind_by_name($stid,':an_accion',$an_accion,10) or die(oci_error($luo_con->refConexion));
+            oci_bind_by_name($stid,':acr_retorno',$crto,-1,OCI_B_CURSOR) or die(oci_error($luo_con->refConexion));
             oci_bind_by_name($stid,':an_imp_codigo',$this->_imp_codigo,10);
-            oci_bind_by_name($stid,':an_pai_codigo',$this->_pai_codigo,10);
-            oci_bind_by_name($stid,':as_tipfamcod',$this->_tipfamcod,10);
-            oci_bind_by_name($stid,':an_imp_origen',$this->_imp_origen,10);
-            oci_bind_by_name($stid,':as_imp_observacion',$this->_imp_observacion,250);
+            oci_bind_by_name($stid,':an_imd_codigo',$this->_imd_codigo,10);
             oci_bind_by_name($stid,':as_cdg',$this->_cdg,20);
             oci_bind_by_name($stid,':as_codigobarras',$this->_codigobarras,20);
             oci_bind_by_name($stid,':as_codsap',$this->_codsap,20);
@@ -439,59 +393,6 @@ class clsmtaImportar {
             oci_bind_by_name($stid,':as_aplica',$this->_aplica,10);
             oci_bind_by_name($stid,':as_tarifa',$this->_tarifa,10);
             oci_bind_by_name($stid,':an_precioiva',$this->_precioiva,15);
-            oci_bind_by_name($stid,':an_imp_usuario',$this->_imp_usuario,10);           
-            
-            if(!$luo_set->ReadcrsMant($this->iuo_con, $stid, $crto)){
-                return clsViewData::showError($this->iuo_con->getICodeError(),$this->iuo_con->getSMsgError());
-            }
-            
-            $this->iuo_con->commitTransaction();
-            
-            $lstData = [];
-            
-            $rowdata = clsViewData::viewData($lstData, false, 1, $this->iuo_con->getMsgRetorno());
-                 
-            oci_free_statement($crto);
-            
-            oci_free_statement($stid);
-            
-           if ($an_accion!='1'){
-                
-                $this->of_desconectar();
-           }
-            
-            unset($luo_set);
-                   
-            return $rowdata;         
-            
-        }
-        catch(Exception $ex){
-            return clsViewData::showError($ex->getCode(), $ex->getMessage());
-        }
-    }
-    
-    public function sp_mta_procesar($an_accion,$an_imp_codigo){
-        try{
-            
-            $ls_sql="begin
-                        pck_mta_importar.sp_mta_procesar(:an_accion,
-                            :acr_retorno,
-                            :an_imp_codigo,
-                            :an_imp_usuario);
-                     end;";
-            
-            $luo_con = new Db();
-            
-            $luo_set = new clsReference();
-            
-            if(!$luo_set->setcrsMant($luo_con, $ls_sql, $stid, $crto, $curs)){
-                return clsViewData::showError($luo_con->getICodeError(),$luo_con->getSMsgError());
-            };
-            
-            oci_bind_by_name($stid,':an_accion',$an_accion,10);
-            oci_bind_by_name($stid,':acr_retorno',$crto,-1,OCI_B_CURSOR) or die(oci_error($luo_con->refConexion));
-            oci_bind_by_name($stid,':an_imp_codigo',$an_imp_codigo,10);
-            oci_bind_by_name($stid,':an_imp_usuario',$this->_imp_usuario,10);
             
             if(!$luo_set->ReadcrsMant($luo_con, $stid, $crto)){
                 return clsViewData::showError($luo_con->getICodeError(),$luo_con->getSMsgError());
@@ -506,81 +407,32 @@ class clsmtaImportar {
             oci_free_statement($crto);
             
             oci_free_statement($stid);
-            
+           
             $luo_con->closeConexion();
             
             unset($luo_set);
                    
-            return $rowdata;                     
+            return $rowdata;          
         }
-        catch(Exception $ex){
-            return clsViewData::showError($ex->getCode(),$ex->getMessage());
-        }        
-    }
-    
-    public function lst_replicar($an_accion,$an_imp_codigo){
-        try{
-            $ls_sql="begin
-                        pck_mta_importar.sp_mta_replicar (:an_accion, 
-                            :acr_retorno,
-                            :an_imp_codigo,
-                            :an_imp_usuario);
-                    end;";
-            
-            $luo_con= new  Db();
-            
-            $luo_set = new clsReference();
-            
-            if(!$luo_set->setcrsMant($luo_con, $ls_sql, $stid, $crto, $curs)){
-                return clsViewData::showError($luo_con->getICodeError(),$luo_con->getSMsgError());
-            };
-            
-            oci_bind_by_name($stid,':an_accion',$an_accion,10) or die(oci_error($luo_con->refConexion));
-            oci_bind_by_name($stid,':acr_retorno',$crto,-1,OCI_B_CURSOR) or die(oci_error($luo_con->refConexion));
-            oci_bind_by_name($stid,':an_imp_codigo',$an_imp_codigo,10);
-            oci_bind_by_name($stid,':an_imp_usuario',$this->_imp_usuario,10);
-            
-            if(!$luo_set->ReadcrsMant($luo_con, $stid, $crto)){
-                return clsViewData::showError($luo_con->getICodeError(),$luo_con->getSMsgError());
-            }
-            
-            $luo_con->commitTransaction();
-            
-            $lstData = [];
-                
-            $rowdata = clsViewData::viewData($lstData, false, 1, $luo_con->getMsgRetorno());
-                 
-            oci_free_statement($crto);
-            
-            oci_free_statement($stid);
-            
-            $luo_con->closeConexion();
-            
-            unset($luo_con);
-            
-            unset($luo_set);
-                   
-            return $rowdata;
-        }
-        catch(Exception $ex){
+        catch(Exception $ex){            
             return clsViewData::showError($ex->getCode(), $ex->getMessage());
         }
+        
     }
-    
-    public function lst_listar($an_imp_periodo,$an_imp_estado,$as_criterio,$an_start,$an_limit){
+
+        
+    public function lst_listar($an_imp_codigo,$as_criterio,$an_start,$an_limit){
         try{
-            
             $ln_rowcount=0;
             
             $ls_sql="begin
-                        pck_mta_importar.sp_lst_listar (:acr_cursor,
+                        pck_mta_importardet.sp_lst_listar (:acr_cursor,
                             :ln_rowcount,
-                            :an_imp_periodo,
-                            :an_imp_estado,
+                            :an_imp_codigo,
                             :as_criterio,
                             :an_start,
                             :an_limit);
-                    end;";
+                    end;";            
             
             $luo_con = new Db();
             
@@ -592,8 +444,7 @@ class clsmtaImportar {
             
              oci_bind_by_name($stid,':acr_cursor',$curs,-1,OCI_B_CURSOR)or die(oci_error($luo_con->refConexion));
              oci_bind_by_name($stid,':ln_rowcount',$ln_rowcount,10);
-             oci_bind_by_name($stid,':an_imp_periodo',$an_imp_periodo,10);
-             oci_bind_by_name($stid,':an_imp_estado',$an_imp_estado,10);
+             oci_bind_by_name($stid,':an_imp_codigo',$an_imp_codigo,10);
              oci_bind_by_name($stid,':as_criterio',$as_criterio,120);
              oci_bind_by_name($stid,':an_start',$an_start,10);
              oci_bind_by_name($stid,':an_limit',$an_limit,10);
@@ -608,10 +459,12 @@ class clsmtaImportar {
              
              unset($luo_con);
              
-             return $rowdata;            
+             return $rowdata;      
         }
         catch(Exception $ex){
             return clsViewData::showError($ex->getCode(), $ex->getMessage());
+            
         }
+        
     }
 }

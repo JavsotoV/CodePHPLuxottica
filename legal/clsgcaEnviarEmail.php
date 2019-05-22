@@ -19,17 +19,15 @@ class clsgcaEnviarEmail {
     //put your code here
     private $rowdata;
     
-    function __construct($rowdata) {
-        $this->_rowdata= json_decode($rowdata,true) ;
-    }
-    
-    public function EditContrato(){
+    public function EditContrato($rowdata){
         
         $lb_retorno=true;
         
         $ln_fila=0;
         
         $ls_entidad='';
+        
+        $this->rowdata = json_decode($rowdata,true) ;
         
         if ($this->_rowdata){
             
@@ -83,7 +81,9 @@ class clsgcaEnviarEmail {
                 $message .="</table>\n\r";
                 $message .="</html>";
                 
-            $lb_retorno=fn_enviaremail($lstr_correo, $ls_titulo, $message, $ls_from, $ls_fromname);            
+                return $message;
+                
+          //  $lb_retorno=fn_enviaremail($lstr_correo, $ls_titulo, $message, $ls_from, $ls_fromname);            
         }
 
         return $lb_retorno;

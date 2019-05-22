@@ -55,6 +55,7 @@ switch ($paramAccion){
     case 2:
         $valida = [
             'imp_codigo'            => ['filter'        => FILTER_VALIDATE_INT],
+            'pai_codigo'            => ['filter'        => FILTER_VALIDATE_INT],
             'criterio'              => ['filter'        => FILTER_UNSAFE_RAW],
             'page'                  => ['filter'        => FILTER_VALIDATE_INT],
             'limit'                 => ['filter'        => FILTER_VALIDATE_INT]
@@ -62,7 +63,7 @@ switch ($paramAccion){
         
         $parametros = filter_var_array($Variables, $valida);
         
-        $rowdata = $luo_impdet->lst_listar($parametros['imp_codigo'],$parametros['criterio'],(($parametros['page'] -1) * $parametros['limit']) , $parametros['limit']);
+        $rowdata = $luo_impdet->lst_listar($parametros['imp_codigo'],$parametros['pai_codigo'],$parametros['criterio'],(($parametros['page'] -1) * $parametros['limit']) , $parametros['limit']);
         
         echo $rowdata;
         

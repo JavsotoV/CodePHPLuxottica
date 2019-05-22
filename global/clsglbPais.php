@@ -28,8 +28,7 @@ class clsglbPais {
             if ($as_flag_condicion!=='S'){
                 $ls_sql="begin pck_glb_pais.sp_lst_listar(:acr_cursor); end;";}
                 else{
-                $ls_sql="begin pck_glb_pais.sp_lst_todos(:acr_cursor); end;";}    
-                
+                $ls_sql="begin pck_glb_pais.sp_lst_todos(:acr_cursor); end;";} 
             
             if (!$luo_con->createConexion()){return clsViewData::showError($luo_con->getICodeError(), $luo_con->getSMsgError()) ;}
            

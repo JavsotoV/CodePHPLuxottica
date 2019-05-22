@@ -43,7 +43,7 @@ class clstrkEncargo {
             $result = $luo_con->sqlsrvExecute($stmt);
             
             if (!$result){return clsViewData::showError(-1, 'error ejecutanndo procedimiento');}
-            
+                    
             $rowdata= clsViewData::viewData( mssqlparsear($result),false);
             
             mssql_free_statement($stmt);
@@ -182,7 +182,7 @@ class clstrkEncargo {
             
             if (!$result){return clsViewData::showError(-1, 'error ejecutando procedimiento sp_trk_lst_encargoxcliente');}
             
-            if (($an_pai_codigo==1) || ($an_pai_codigo==4)){
+           // if (($an_pai_codigo==1) || ($an_pai_codigo==4)){
                 
                 $stmtdet=mssql_init($ls_sqldet,$luo_con->refConexion);
                 
@@ -200,26 +200,33 @@ class clstrkEncargo {
                     
                     while ($rowdet = mssql_fetch_array($resultdet, MSSQL_ASSOC)) {
                             
-                            $row['fechaprogramada']= $rowdet['fechaprogramada'];                            
+                            $row['fechaprogramada']= $rowdet['fechaprogramada'];   
+                            
+                            $row['estado']         = $rowdet['estado'];
                             
                             if ($rowdet['status_estado']<1){
                                 
                                if (fn_obtenernumerodias($row['fechaentrega'],$rowdet['fecha_actual'], $ln_diferencia)>0){
-                                // if (strtotime($rowdet['fecha_actual'])>=strtotime($row['fechaentrega'])){   
-                                   if ($ln_diferencia<0) {$row['retrazado']= 'RETRAZADO';}
-                                // }                            
+                                   if ($ln_diferencia<0) {$row['retrazado']= 'RETRASADO';}
+                               }
+                               
+                               if (fn_obtenernumerodias($row['fechaprogramada'],$rowdet['fecha_actual'], $ln_diferencia)>0){
+                                   if ($ln_diferencia<0) 
+                                       {$row['retrazado']= 'RETRASADO';}
+                                       else
+                                       {$row['retrazado']= '';}
                                }
                             }
                     }
                     
                     $lstArray[] = $row;
                 }                
-            }else{
+           /* }else{
                 while ($row = mssql_fetch_array($result, MSSQL_ASSOC)) 
                 {
                     $lstArray[] = $row;
                 }
-            }
+            }*/
                         
             if ($as_json){
                 $rowdata= clsViewData::viewData($lstArray,false);}

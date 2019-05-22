@@ -28,20 +28,20 @@ class clsprmPlantillaCatalogo {
     private $_fam_codigo;
     private $_sfa_codigo;
     private $_gfa_codigo;
-    private $_cta_codigo;
     private $_pca_operador;
     private $_trf_codigo;
+    private $_pca_estado;
     private $_pca_usuario;
 
     function __construct($an_pca_usuario) {
         $this->_pca_usuario=$an_pca_usuario;
         $this->_pca_paquete=0;
-        $this->_pca_codigo=0;
-        $this->_fma_codigo=0;
-        $this->_sfa_codigo=0;
-        $this->_gfa_codigo=0;
-        $this->_cta_codigo=0;
-        $this->_pca_operador=0;
+        $this->_tipfamcod=[];
+        $this->_pca_codigo=[];
+        $this->_fam_codigo=[];
+        $this->_sfa_codigo=[];
+        $this->_gfa_codigo=[];
+        $this->_pca_estado=[];
         $this->_trf_codigo=0;
     }
     
@@ -81,10 +81,6 @@ class clsprmPlantillaCatalogo {
         $this->_gfa_codigo = $_gfa_codigo;
     }
 
-    function set_cta_codigo($_cta_codigo) {
-        $this->_cta_codigo = $_cta_codigo;
-    }
-
     function set_pca_operador($_pca_operador) {
         $this->_pca_operador = $_pca_operador;
     }
@@ -92,7 +88,11 @@ class clsprmPlantillaCatalogo {
     function set_trf_codigo($_trf_codigo) {
         $this->_trf_codigo = $_trf_codigo;
     }
-
+    
+    function set_pca_estado($_pca_estado) {
+        $this->_pca_estado = $_pca_estado;
+    }
+  
     public function loadData ( $lstParametros ){
      foreach ( $lstParametros as $key => $value) {
             $method = 'set_' . ucfirst(strtolower( $key ) );
@@ -109,22 +109,24 @@ class clsprmPlantillaCatalogo {
                             :acr_retorno,
                             :an_plt_codigo,
                             :an_pld_codigo,
+                            :an_pca_paquete,
                             :an_pca_codigo,
                             :an_pca_origen,
-                            :an_pca_paquete,
                             :as_tipfamcod,
                             :an_fam_codigo,
                             :an_sfa_codigo,
                             :an_gfa_codigo,
-                            :an_cta_codigo,
                             :an_pca_operador,
                             :an_trf_codigo,
+                            :an_pca_estado,
                             :an_pca_usuario);
                      end;";
             
-                $luo_con= new  Db();
+           $luo_con= new  Db();
             
            $luo_set = new clsReference();
+           
+           $ln_count =  count($this->_pca_codigo);
             
            if(!$luo_set->setcrsMant($luo_con, $ls_sql, $stid, $crto, $curs)){
                 return clsViewData::showError($luo_con->getICodeError(),$luo_con->getSMsgError());
@@ -134,16 +136,16 @@ class clsprmPlantillaCatalogo {
            oci_bind_by_name($stid,':acr_retorno',$crto,-1,OCI_B_CURSOR) or die(oci_error($luo_con->refConexion));
            oci_bind_by_name($stid,':an_plt_codigo',$this->_plt_codigo,10);
            oci_bind_by_name($stid,':an_pld_codigo',$this->_pld_codigo,10);
-           oci_bind_by_name($stid,':an_pca_codigo',$this->_pca_codigo,10);
-           oci_bind_by_name($stid,':an_pca_origen',$this->_pca_origen,10);
            oci_bind_by_name($stid,':an_pca_paquete',$this->_pca_paquete,10);
-           oci_bind_by_name($stid,':as_tipfamcod',$this->_tipfamcod,10);
-           oci_bind_by_name($stid,':an_fam_codigo',$this->_fam_codigo,10);
-           oci_bind_by_name($stid,':an_sfa_codigo',$this->_sfa_codigo,10);
-           oci_bind_by_name($stid,':an_gfa_codigo',$this->_gfa_codigo,10);
-           oci_bind_by_name($stid,':an_cta_codigo',$this->_cta_codigo,10);
+           oci_bind_array_by_name($stid,':an_pca_codigo',$this->_pca_codigo,$ln_count,-1,SQLT_INT);
+           oci_bind_by_name($stid,':an_pca_origen',$this->_pca_origen,10);           
+           oci_bind_array_by_name($stid,':as_tipfamcod',$this->_tipfamcod,$ln_count,-1,SQLT_CHR);
+           oci_bind_array_by_name($stid,':an_fam_codigo',$this->_fam_codigo,$ln_count,-1,SQLT_INT);
+           oci_bind_array_by_name($stid,':an_sfa_codigo',$this->_sfa_codigo,$ln_count,-1,SQLT_INT);
+           oci_bind_array_by_name($stid,':an_gfa_codigo',$this->_gfa_codigo,$ln_count,-1,SQLT_INT);
            oci_bind_by_name($stid,':an_pca_operador',$this->_pca_operador,10);
            oci_bind_by_name($stid,':an_trf_codigo',$this->_trf_codigo,10);
+           oci_bind_array_by_name($stid,':an_pca_estado',$this->_pca_estado,$ln_count,-1,SQLT_INT);
            oci_bind_by_name($stid,':an_pca_usuario',$this->_pca_usuario,10);
            
            if(!$luo_set->ReadcrsMant($luo_con, $stid, $crto)){
@@ -174,7 +176,7 @@ class clsprmPlantillaCatalogo {
         }
     }
     
-    public function lst_listar($an_plt_codigo,$an_pld_codigo){
+    public function lst_listar($an_plt_codigo){
         try{
             $ls_sql="begin
                         pck_prm_plantillacatalogo.sp_lst_listar (:acr_cursor,
@@ -208,4 +210,42 @@ class clsprmPlantillaCatalogo {
             return clsViewData::showError($ex->getCode(), $ex->getMessage());
         }
     }
+    
+    public function lst_grupo($an_plt_codigo,$an_pld_codigo){
+         try{
+            $ls_sql="begin
+                        pck_prm_plantillacatalogo.sp_lst_grupo (:acr_cursor,
+                            :an_plt_codigo,
+                            :an_pld_codigo);
+                     end;";
+            
+            $luo_con = new Db();
+            
+            $luo_set = new clsReference();
+            
+            if(!$luo_set->setcrsLst($luo_con, $ls_sql, $stid, $curs)){
+                return clsViewData::showError($luo_con->getICodeError(),$luo_con->getSMsgError());
+            }
+            
+             oci_bind_by_name($stid,':acr_cursor',$curs,-1,OCI_B_CURSOR)or die(oci_error($luo_con->refConexion));
+             oci_bind_by_name($stid,':an_plt_codigo',$an_plt_codigo,10);
+             oci_bind_by_name($stid,':an_pld_codigo',$an_pld_codigo,10);
+            
+             if(!$luo_con->ociExecute($stid)){return clsViewData::showError($luo_con->getICodeError(), $luo_con->getSMsgError());}
+             
+             $rowdata= clsViewData::viewData(parsearcursor($curs),false);
+             
+             oci_free_statement($stid);
+             
+             $luo_con->closeConexion();
+             
+             unset($luo_con);
+             
+             return $rowdata;            
+        }
+        catch(Exception $ex){
+            return clsViewData::showError($ex->getCode(), $ex->getMessage());
+        }
+    }
+    
 }

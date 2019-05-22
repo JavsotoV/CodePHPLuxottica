@@ -39,7 +39,9 @@ switch ($paramAccion){
         $valida =[
             'encargo'           => ['filter'        => FILTER_UNSAFE_RAW,'flags' => FILTER_REQUIRE_ARRAY],
             'fecha'             => ['filter'        => FILTER_UNSAFE_RAW,'flags' => FILTER_REQUIRE_ARRAY],
-            'motivo'            => ['filter'        => FILTER_UNSAFE_RAW,'flags' => FILTER_REQUIRE_ARRAY]
+            'motivo'            => ['filter'        => FILTER_UNSAFE_RAW,'flags' => FILTER_REQUIRE_ARRAY],
+            'tipocristal'       => ['filter'        => FILTER_UNSAFE_RAW,'flags' => FILTER_REQUIRE_ARRAY],
+            'suministromontura' => ['filter'        => FILTER_UNSAFE_RAW,'flags' => FILTER_REQUIRE_ARRAY]
         ]; 
         
         $parametros = filter_var_array($Variables, $valida);

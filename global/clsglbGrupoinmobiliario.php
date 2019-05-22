@@ -52,7 +52,6 @@ class clsglbGrupoinmobiliario {
             $ls_sql="begin
                         pck_glb_grupoinmobiliaria.sp_glb_grupoinmobiliaria ( :an_accion,
                         :acr_retorno,
-                        :acr_cursor,
                         :an_imb_codigo,
                         :an_pai_codigo,
                         :as_imb_descripcion,

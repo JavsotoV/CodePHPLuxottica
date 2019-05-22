@@ -34,6 +34,7 @@ class clsmtaCatalogo {
     private $_stock_minimo;
     private $_liquidacion;
     private $_etiquetar;
+    private $_cri_ref;
     private $_col_codigo;
     private $_cri_diametroini;
     private $_cri_diametrofin;
@@ -90,6 +91,7 @@ function __construct($an_usuario) {
     $this->_stock_minimo;
     $this->_liquidacion;
     $this->_etiquetar;
+    
     $this->_col_codigo=0;
     $this->_cri_diametroini=0;
     $this->_cri_diametrofin=0;
@@ -98,6 +100,7 @@ function __construct($an_usuario) {
     $this->_cri_esferaini=0;
     $this->_cri_esferafin=0;
     $this->_col_codigoc=0;
+    $this->_cri_ref=0;
     $this->_col_codigom=0;
     $this->_mta_codigo=0;
     $this->_gfa_graduable='';
@@ -199,6 +202,10 @@ function set_liquidacion($_liquidacion) {
 
 function set_etiquetar($_etiquetar) {
     $this->_etiquetar = $_etiquetar;
+}
+
+function set_cri_ref($_cri_ref) {
+    $this->_cri_ref = $_cri_ref;
 }
 
 function set_col_codigo($_col_codigo) {
@@ -374,6 +381,7 @@ public function sp_mta_catalogo($an_accion){
                 to_number(:an_stock_minimo,'999,999,999.999'),
                 :as_liquidacion,
                 :as_etiquetar,
+                to_number(:an_cri_ref,'999.999'),
                 :an_col_codigo,
                 to_number(:an_cri_diametroini,'999,999,999.999'),
                 to_number(:an_cri_diametrofin,'999,999,999.999'),
@@ -441,6 +449,7 @@ public function sp_mta_catalogo($an_accion){
            oci_bind_by_name($stid,':an_stock_minimo',$this->_stock_minimo,15);
            oci_bind_by_name($stid,':as_liquidacion',$this->_liquidacion,10);
            oci_bind_by_name($stid,':as_etiquetar',$this->_etiquetar,10);
+           oci_bind_by_name($stid,':an_cri_ref',$this->_cri_ref,10);
            oci_bind_by_name($stid,':an_col_codigo',$this->_col_codigo,10);
            oci_bind_by_name($stid,':an_cri_diametroini',$this->_cri_diametroini,15);
            oci_bind_by_name($stid,':an_cri_diametrofin',$this->_cri_diametrofin,15);
