@@ -41,7 +41,9 @@ switch ($paramAccion){
             'enc_codigo'       => ['filter'     => FILTER_VALIDATE_INT],
             'mtv_codigo'       => ['filter'     => FILTER_VALIDATE_INT],
             'prg_fechaentrega' => ['filter'     => FILTER_VALIDATE_REGEXP, 'options' => [ 'regexp' => '/^(\d){2}.(\d){2}.(\d){4}$/']],
-            'prg_observacion'  => ['filter'     => FILTER_UNSAFE_RAW]];
+            'prg_observacion'  => ['filter'     => FILTER_UNSAFE_RAW],
+            'tpc_codigo'       => ['filter'     => FILTER_VALIDATE_INT],
+            'smn_codigo'       => ['filter'     => FILTER_VALIDATE_INT]];
         
         $parametros = filter_var_array($Variables,$valida);
         

@@ -22,9 +22,10 @@ class clstrkFormatArray {
              'imd_motivo'                => 'MOTIVO',
              'imd_tipocristal'           => 'TIPO CRISTAL',
              'imd_suministromontura'     => 'SUMINISTRO MONTURA',
-             'pai_denominacion'          => 'REGION');
+             'pai_denominacion'          => 'REGION',
+             'prg_observacion'           => 'OBSERVACION');
          
-          $lstArrayHeaderWith=Array(40,20,70,40,40,20);
+          $lstArrayHeaderWith=Array(40,20,70,40,40,20,70);
           
            $lstArrayFormat=Array('imd_encargo'  => '@',
                                 'imd_fecha'     => 'dd/mm/yyyy');

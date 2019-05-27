@@ -14,11 +14,13 @@ Ext.application({
     appFolder: '../../../../luxottica/app/luxottica',
     appProperty: 'luxottica',
     controllers: [
+        'gmo.global.glbubigeo.ctrlstubigeo',
         'gmo.global.glbpersona.ctrMain',
         'gmo.global.glbpersona.ctrMtto',
         'gmo.global.utiles.ctrfuncion',
         'gmo.global.glbpersonadomicilio.ctrMtto',
-        'gmo.global.glbrepresentante.ctrMtto'
+        'gmo.global.glbrepresentante.ctrMtto',
+        'gmo.global.glbpersona.ctrlstglbpersona'
     ],
     name: 'luxottica',
 

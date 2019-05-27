@@ -21,6 +21,8 @@ class clstrkReprogramacion {
     private $_mtv_codigo;
     private $_prg_fechaentrega;
     private $_prg_observacion;
+    private $_tpc_codigo;
+    private $_smn_codigo;    
     private $_prg_usuario;
     
     function __construct($as_nom_user) {        
@@ -39,9 +41,17 @@ class clstrkReprogramacion {
     }
     
     function set_prg_observacion($_prg_observacion) {
-        $this->_prg_observacion = $_prg_observacion;
+        $this->_prg_observacion = mb_strtoupper($_prg_observacion,'utf-8');
     }
     
+    function set_tpc_codigo($_tpc_codigo) {
+        $this->_tpc_codigo = $_tpc_codigo;
+    }
+    
+    function set_smn_codigo($_smn_codigo) {
+        $this->_smn_codigo = $_smn_codigo;
+    }
+
     public function loadData ( $lstParametros ){
         foreach ( $lstParametros as $key => $value) {
             $method = 'set_' . ucfirst(strtolower( $key ) );
@@ -73,6 +83,8 @@ class clstrkReprogramacion {
                  mssql_bind($stmt,'@an_mtv_codigo',$this->_mtv_codigo,SQLINT1,false,false,10);
                  mssql_bind($stmt,'@ad_prg_fechaentrega',$this->_prg_fechaentrega,SQLVARCHAR,false,false,20);
                  mssql_bind($stmt,'@as_prg_observacion',$this->_prg_observacion,SQLVARCHAR,false,false,250);
+                 mssql_bind($stmt,'@an_tpc_codigo',$this->_tpc_codigo,SQLINT1,false,false,10);
+                 mssql_bind($stmt,'@an_smn_codigo',$this->_smn_codigo,SQLINT1,false,false,10);
                  mssql_bind($stmt,'@as_prg_usuario',$this->_prg_usuario,SQLVARCHAR,false,false,40);
                 
                 $result = $luo_con->sqlsrvExecute($stmt);
