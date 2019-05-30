@@ -156,10 +156,11 @@ foreach ($objWorksheet->getRowIterator() as $row) {
             
             if ($imp_origen==3) {
                         $parametros['codsap']          = $data[0];
-                        $parametros['familia']         = $data[1];
-                        $parametros['subfam']          = $data[2];
-                        $parametros['grupofam']        = $data[3];
-                        $parametros['descatalogado']   = $data[4];
+                        $parametros['codigobarras']    = $data[1];
+                        $parametros['familia']         = $data[2];
+                        $parametros['subfam']          = $data[3];
+                        $parametros['grupofam']        = $data[4];
+                        $parametros['descatalogado']   = $data[5];
             } 
             
             $luo_imp->loadData($parametros);  

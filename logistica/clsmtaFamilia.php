@@ -18,6 +18,52 @@ require_once("../Base/clsReference.php");
 
 class clsmtaFamilia {
     //put your code here
+    private $_fam_codigo;
+    private $_pai_codigo;
+    private $_fam_cdg;
+    private $_tipfamcod;
+    private $_fam_descripcion;
+    private $_fam_mostrar;
+    private $_fam_usuario;
+    
+    function __construct($an_fam_usuario) {
+        $this->_fam_codigo=0;
+        $this->_fam_usuario=$an_fam_usuario;
+    }
+    
+    function set_fam_codigo($_fam_codigo) {
+        $this->_fam_codigo = $_fam_codigo;
+    }
+
+    function set_pai_codigo($_pai_codigo) {
+        $this->_pai_codigo = $_pai_codigo;
+    }
+
+    function set_fam_cdg($_fam_cdg) {
+        $this->_fam_cdg = $_fam_cdg;
+    }
+
+    function set_tipfamcod($_tipfamcod) {
+        $this->_tipfamcod = $_tipfamcod;
+    }
+
+    function set_fam_descripcion($_fam_descripcion) {
+        $this->_fam_descripcion = $_fam_descripcion;
+    }
+
+    function set_fam_mostrar($_fam_mostrar) {
+        $this->_fam_mostrar = $_fam_mostrar;
+    }
+
+    public function loadData ( $lstParametros ){
+        foreach ( $lstParametros as $key => $value) {
+            $method = 'set_' . ucfirst(strtolower( $key ) );
+            if ( method_exists( $this, $method ) ){
+                call_user_func_array(array( $this, $method ), array( $value ));               
+            }
+        }
+    }    
+    
     public function lst_listar($an_pai_codigo,$as_tipfamcod, $as_criterio, $an_start,$an_limit){
         
         try{

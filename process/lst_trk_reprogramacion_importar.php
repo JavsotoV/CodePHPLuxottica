@@ -43,7 +43,7 @@ $rowdata= [];
 
 $fil=0;
 $col=0;
-$filadata=3;
+$filadata=1;
 
 $lst_campos = array('encargo','fecha','motivo','tipocristal','suministromontura');
 

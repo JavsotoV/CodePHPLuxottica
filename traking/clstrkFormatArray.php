@@ -23,11 +23,15 @@ class clstrkFormatArray {
              'imd_tipocristal'           => 'TIPO CRISTAL',
              'imd_suministromontura'     => 'SUMINISTRO MONTURA',
              'pai_denominacion'          => 'REGION',
-             'prg_observacion'           => 'OBSERVACION');
+             'prg_observacion'           => 'OBSERVACION',
+             'imd_fecharegistro'         => 'FECHA IMPORTACION',
+             'prg_fecharegistro'         => 'FECHA OBSERVACION');
          
-          $lstArrayHeaderWith=Array(40,20,70,40,40,20,70);
+          $lstArrayHeaderWith=Array(40,20,70,40,40,20,70,25,25);
           
-           $lstArrayFormat=Array('imd_encargo'  => '@',
-                                'imd_fecha'     => 'dd/mm/yyyy');
+           $lstArrayFormat=Array('imd_encargo'      => '@',
+                                'imd_fecha'         => 'dd/mm/yyyy',
+                                'imd_fecharegistro' => 'yyyy/mm/dd hh:mm:ss',
+                                'prg_fecharegistro' => 'yyyy/mm/dd hh:mm:ss');
     }
 }

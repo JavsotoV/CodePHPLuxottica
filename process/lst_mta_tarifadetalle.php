@@ -69,9 +69,9 @@ switch ($paramAccion){
             'limit'                 => ['filter'        => FILTER_VALIDATE_INT]];
         
             $parametros = filter_var_array($Variables, $valida);
-        
-            $rowdata = $luo_tarifadetalle->lst_listar($parametros['trf_codigo'], $parametros['tipfamcod'], $parametros['fam_codigo'], $parametros['sfa_codigo'], $parametros['gfa_codigo'], $parametros['criterio'],(($parametros['page'] -1) * $parametros['limit']) , $parametros['limit']);
             
+            $rowdata = $luo_tarifadetalle->lst_listar($parametros['trf_codigo'], $parametros['tipfamcod'], $parametros['fam_codigo'], $parametros['sfa_codigo'], $parametros['gfa_codigo'], $parametros['criterio'],(($parametros['page'] -1) * $parametros['limit']) , $parametros['limit']);
+                        
             echo $rowdata;
         
             break;

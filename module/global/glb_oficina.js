@@ -13,6 +13,9 @@ Ext.application({
         'gmo.global.glbconfig.oficina.ctrMain',
         'gmo.global.glbconfig.oficina.ctrMtto'        
     ],
+    views: [
+        'gmo.global.glbubigeo.winlistado'
+    ],
     name: 'luxottica',
         
     launch: function() {
