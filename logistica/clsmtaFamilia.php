@@ -64,6 +64,17 @@ class clsmtaFamilia {
         }
     }    
     
+     public function sp_mta_familia($an_accion){
+         
+         try{
+             $ls_sql="";
+             
+         }
+         catch(exception $ex){
+             return clsViewData::showError($ex->getCode(), $ex->getMessage());
+         }
+     }
+    
     public function lst_listar($an_pai_codigo,$as_tipfamcod, $as_criterio, $an_start,$an_limit){
         
         try{
